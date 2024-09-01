@@ -2,6 +2,7 @@ package main
 
 import (
 	"aoc2023/src/day01"
+	"aoc2023/src/day02"
 	"log"
 	"os"
 )
@@ -14,6 +15,8 @@ func main() {
 	switch os.Args[1] {
 	case "1":
 		day01.Main()
+	case "2":
+		day02.Main()
 	default:
 		log.Fatalln("invalid day specified: either not implemented or not 1-25")
 	}
