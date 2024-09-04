@@ -16,6 +16,7 @@ func Main() {
 	}
 
 	fmt.Printf("day four part one: %d\n", Part1(string(file)))
+	fmt.Printf("day four part two: %d\n", Part2(string(file)))
 }
 
 var (
@@ -61,6 +62,48 @@ func Part1(input string) (sum int) {
 			}
 		}
 		sum += getPoints(matches)
+	}
+	return sum
+}
+
+type scorecard struct {
+	instances int
+	winners   []int
+	givens    []int
+}
+
+func processCards(input string) (cards []scorecard) {
+	for _, line := range strings.Split(input, "\n") {
+		cards = append(cards, scorecard{
+			instances: 1,
+			winners:   processNums(winRe.FindAllStringSubmatch(line, -1)[0][1]),
+			givens:    processNums(givRe.FindAllStringSubmatch(line, -1)[0][1]),
+		})
+	}
+	return cards
+}
+
+func Part2(input string) (sum int) {
+	cards := processCards(input)
+
+	for i, card := range cards {
+		matches := 0
+
+		for _, given := range card.givens {
+			for _, winner := range card.winners {
+				if given != winner {
+					continue
+				}
+				matches += 1
+			}
+		}
+		for j := 1; j <= matches; j++ {
+			cards[i+j].instances += card.instances
+		}
+	}
+
+	for _, card := range cards {
+		sum += card.instances
 	}
 	return sum
 }
