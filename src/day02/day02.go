@@ -14,8 +14,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day two part one: %d\n", Part1(string(file)))
-	fmt.Printf("day two part two: %d\n", Part2(string(file)))
+	fmt.Printf("day two part one: %d\n", part1(string(file)))
+	fmt.Printf("day two part two: %d\n", part2(string(file)))
 }
 
 const (
@@ -24,7 +24,7 @@ const (
 	MAX_BLUE  = 14
 )
 
-func Part1(input string) (sum int) {
+func part1(input string) (sum int) {
 	for i, game := range processInput(input) {
 		validGame := true
 
@@ -67,7 +67,7 @@ func processDraw(draw string) (int, string) {
 	return amount, parts[1]
 }
 
-func Part2(input string) (sum int) {
+func part2(input string) (sum int) {
 	for _, game := range processInput(input) {
 		var mRed, mGreen, mBlue int
 

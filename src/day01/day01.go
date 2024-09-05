@@ -13,11 +13,11 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day one part one: %d\n", Part1(string(file)))
-	fmt.Printf("day one part two: %d\n", Part2(string(file)))
+	fmt.Printf("day one part one: %d\n", part1(string(file)))
+	fmt.Printf("day one part two: %d\n", part2(string(file)))
 }
 
-func Part1(input string) int {
+func part1(input string) int {
 	sum := 0
 	for _, line := range strings.Split(input, "\n") {
 		sum += (firstDigit(line) * 10) + lastDigit(line)
@@ -45,7 +45,7 @@ func lastDigit(line string) int {
 	return -1
 }
 
-func Part2(input string) int {
+func part2(input string) int {
 	sum := 0
 	for _, line := range strings.Split(input, "\n") {
 		sum += (firstNum(line) * 10) + lastNum(line)

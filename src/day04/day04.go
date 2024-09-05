@@ -15,8 +15,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day four part one: %d\n", Part1(string(file)))
-	fmt.Printf("day four part two: %d\n", Part2(string(file)))
+	fmt.Printf("day four part one: %d\n", part1(string(file)))
+	fmt.Printf("day four part two: %d\n", part2(string(file)))
 }
 
 var (
@@ -49,7 +49,7 @@ func getPoints(matches int) int {
 	return points
 }
 
-func Part1(input string) (sum int) {
+func part1(input string) (sum int) {
 	for _, line := range strings.Split(input, "\n") {
 		matches := 0
 
@@ -83,7 +83,7 @@ func processCards(input string) (cards []scorecard) {
 	return cards
 }
 
-func Part2(input string) (sum int) {
+func part2(input string) (sum int) {
 	cards := processCards(input)
 
 	for i, card := range cards {

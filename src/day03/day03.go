@@ -15,8 +15,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day three part one: %d\n", Part1(string(file)))
-	fmt.Printf("day three part two: %d\n", Part2(string(file)))
+	fmt.Printf("day three part one: %d\n", part1(string(file)))
+	fmt.Printf("day three part two: %d\n", part2(string(file)))
 }
 
 type number struct {
@@ -51,7 +51,7 @@ func processNumbers(input string) (numbers []number, source []string) {
 	return numbers, source
 }
 
-func Part1(input string) (sum int) {
+func part1(input string) (sum int) {
 	numbers, source := processNumbers(input)
 
 	for _, num := range numbers {
@@ -105,7 +105,7 @@ func processStars(input string) (map[int][]*number, []*number, []string) {
 	return stars, numbers, source
 }
 
-func Part2(input string) (sum int) {
+func part2(input string) (sum int) {
 	stars, numbers, source := processStars(input)
 
 	for _, num := range numbers {
