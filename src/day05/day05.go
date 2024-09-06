@@ -19,9 +19,8 @@ func Main() {
 }
 
 var (
-	seedRe = regexp.MustCompile(`(?:seeds:)((?:\s\d+)+)`)
-	numRe  = regexp.MustCompile(`\d+`)
-	mapRe  = regexp.MustCompile(`(\w+)(?:-to-)(\w+)(?:\smap:\n)((?:\d+\s\d+\s\d+\s)+)`)
+	numRe = regexp.MustCompile(`\d+`)
+	mapRe = regexp.MustCompile(`(\w+)-to-(\w+)`)
 )
 
 type spec uint8
@@ -54,20 +53,16 @@ type seed struct {
 }
 
 type mapRange struct {
-	srcRange [2]int64
-	trans    int64
+	src   [2]int64
+	trans int64
 }
 
-type seedMap struct { // must be used with map[spec]seedMap for source id
-	dstId  spec
-	ranges []mapRange
-}
-
-func processInput(input string) ([]seed, map[spec]seedMap) {
+func processInput1(input string) ([]seed, map[spec][]mapRange) {
 	seeds := []seed{}
-	seedMaps := map[spec]seedMap{}
+	seedMaps := map[spec][]mapRange{}
+	chunks := strings.Split(input, "\n\n")
 
-	for _, sNum := range numRe.FindAllString(seedRe.FindStringSubmatch(input)[1], -1) {
+	for _, sNum := range numRe.FindAllString(chunks[0], -1) {
 		dNum, err := strconv.ParseInt(sNum, 10, 64)
 		if err != nil {
 			log.Fatal(err)
@@ -79,20 +74,18 @@ func processInput(input string) ([]seed, map[spec]seedMap) {
 		})
 	}
 
-	for _, group := range mapRe.FindAllStringSubmatch(input, -1) {
-		sm := seedMap{
-			dstId:  strSpec[group[2]],
-			ranges: []mapRange{},
-		}
+	for _, chunk := range chunks[1:] {
+		specs := mapRe.FindAllStringSubmatch(chunk, -1)[0]
+		mrs := []mapRange{}
 
-		for _, nums := range strings.Split(group[3], "\n") {
-			if nums == "" {
+		for i, nums := range strings.Split(chunk, "\n") {
+			if i == 0 {
 				continue
 			}
 			mr := mapRange{}
 			var dstStart int64
 
-			for i, sNum := range numRe.FindAllString(nums, -1) {
+			for i, sNum := range strings.Split(nums, " ") {
 				dNum, err := strconv.ParseInt(sNum, 10, 64)
 				if err != nil {
 					log.Fatal(err)
@@ -101,33 +94,33 @@ func processInput(input string) ([]seed, map[spec]seedMap) {
 				if i == 0 {
 					dstStart = dNum
 				} else if i == 1 {
-					mr.srcRange = [2]int64{dNum, 0}
+					mr.src = [2]int64{dNum, 0}
 				} else if i == 2 {
-					mr.srcRange[1] = mr.srcRange[0] + dNum
+					mr.src[1] = mr.src[0] + dNum
 				}
 			}
-			mr.trans = dstStart - mr.srcRange[0]
-			sm.ranges = append(sm.ranges, mr)
+			mr.trans = dstStart - mr.src[0]
+			mrs = append(mrs, mr)
 		}
-		seedMaps[strSpec[group[1]]] = sm
+		seedMaps[strSpec[specs[1]]] = mrs
 	}
 	return seeds, seedMaps
 }
 
 func part1(input string) (min int64) {
-	seeds, seedMaps := processInput(input)
+	seeds, seedMaps := processInput1(input)
 
 	for i := base; i < loc; i++ {
-		for j, mapRange := range seedMaps[i].ranges {
+		for j, mapRange := range seedMaps[i] {
 			for k, seed := range seeds {
 				if seed.id != i {
 					continue
 				}
 
-				if seed.val >= mapRange.srcRange[0] && seed.val < mapRange.srcRange[1] {
+				if seed.val >= mapRange.src[0] && seed.val < mapRange.src[1] {
 					seeds[k].id++
 					seeds[k].val += mapRange.trans
-				} else if j == len(seedMaps[i].ranges)-1 {
+				} else if j == len(seedMaps[i])-1 {
 					seeds[k].id++
 				}
 			}
