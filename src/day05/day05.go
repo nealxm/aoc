@@ -16,11 +16,13 @@ func Main() {
 	}
 
 	fmt.Printf("day five part one: %d\n", part1(string(file)))
+	fmt.Printf("day five part two: %d\n", part2(string(file)))
 }
 
 var (
-	numRe = regexp.MustCompile(`\d+`)
-	mapRe = regexp.MustCompile(`(\w+)-to-(\w+)`)
+	numRe  = regexp.MustCompile(`\d+`)
+	mapRe  = regexp.MustCompile(`(\w+)-to-(\w+)`)
+	num2Re = regexp.MustCompile(`\s\d+\s\d+`)
 )
 
 type spec uint8
@@ -52,29 +54,19 @@ type seed struct {
 	val int64
 }
 
+type numRange struct {
+	min, max int64
+}
+
 type mapRange struct {
-	src   [2]int64
+	numRange
 	trans int64
 }
 
-func processInput1(input string) ([]seed, map[spec][]mapRange) {
-	seeds := []seed{}
+func processMaps(chunks []string) map[spec][]mapRange {
 	seedMaps := map[spec][]mapRange{}
-	chunks := strings.Split(input, "\n\n")
 
-	for _, sNum := range numRe.FindAllString(chunks[0], -1) {
-		dNum, err := strconv.ParseInt(sNum, 10, 64)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		seeds = append(seeds, seed{
-			id:  base,
-			val: dNum,
-		})
-	}
-
-	for _, chunk := range chunks[1:] {
+	for _, chunk := range chunks {
 		specs := mapRe.FindAllStringSubmatch(chunk, -1)[0]
 		mrs := []mapRange{}
 
@@ -94,17 +86,35 @@ func processInput1(input string) ([]seed, map[spec][]mapRange) {
 				if i == 0 {
 					dstStart = dNum
 				} else if i == 1 {
-					mr.src = [2]int64{dNum, 0}
+					mr.min = dNum
 				} else if i == 2 {
-					mr.src[1] = mr.src[0] + dNum
+					mr.max = mr.min + dNum
 				}
 			}
-			mr.trans = dstStart - mr.src[0]
+			mr.trans = dstStart - mr.min
 			mrs = append(mrs, mr)
 		}
 		seedMaps[strSpec[specs[1]]] = mrs
 	}
-	return seeds, seedMaps
+	return seedMaps
+}
+
+func processInput1(input string) ([]seed, map[spec][]mapRange) {
+	seeds := []seed{}
+	chunks := strings.Split(input, "\n\n")
+
+	for _, sNum := range numRe.FindAllString(chunks[0], -1) {
+		dNum, err := strconv.ParseInt(sNum, 10, 64)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		seeds = append(seeds, seed{
+			id:  base,
+			val: dNum,
+		})
+	}
+	return seeds, processMaps(chunks[1:])
 }
 
 func part1(input string) (min int64) {
@@ -117,7 +127,7 @@ func part1(input string) (min int64) {
 					continue
 				}
 
-				if seed.val >= mapRange.src[0] && seed.val < mapRange.src[1] {
+				if seed.val >= mapRange.min && seed.val < mapRange.max {
 					seeds[k].id++
 					seeds[k].val += mapRange.trans
 				} else if j == len(seedMaps[i])-1 {
@@ -133,6 +143,126 @@ func part1(input string) (min int64) {
 		}
 		if seed.val < min {
 			min = seed.val
+		}
+	}
+	return min
+}
+
+type seedRange struct {
+	id spec
+	numRange
+}
+
+func processInput2(input string) ([]seedRange, map[spec][]mapRange) {
+	seedRanges := []seedRange{}
+	chunks := strings.Split(input, "\n\n")
+
+	for _, nums := range num2Re.FindAllString(chunks[0], -1) {
+		sr := seedRange{}
+
+		for i, sNum := range strings.Split(strings.TrimSpace(nums), " ") {
+			dNum, err := strconv.ParseInt(sNum, 10, 64)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			if i == 0 {
+				sr.min = dNum
+			} else if i == 1 {
+				sr.max = sr.min + dNum
+			}
+		}
+		seedRanges = append(seedRanges, sr)
+	}
+	return seedRanges, processMaps(chunks[1:])
+}
+
+func part2(input string) (min int64) {
+	seedRanges, seedMaps := processInput2(input)
+
+main:
+	for {
+		for i, sr := range seedRanges {
+			if sr.id == loc {
+				continue
+			}
+
+			for j, mr := range seedMaps[sr.id] {
+				if sr.max <= mr.min || sr.min >= mr.max {
+					if j == len(seedMaps[sr.id])-1 {
+						seedRanges[i].id++
+					}
+					continue
+
+				} else if sr.min >= mr.min && sr.max <= mr.max {
+					seedRanges[i].min += mr.trans
+					seedRanges[i].max += mr.trans
+					seedRanges[i].id++
+					break
+
+				} else if sr.min < mr.min && sr.max > mr.max {
+					seedRanges = append(seedRanges, seedRange{
+						id: sr.id,
+						numRange: numRange{
+							min: sr.min,
+							max: mr.min,
+						},
+					})
+					seedRanges = append(seedRanges, seedRange{
+						id: sr.id,
+						numRange: numRange{
+							min: mr.max,
+							max: sr.max,
+						},
+					})
+					seedRanges[i].min = mr.min + mr.trans
+					seedRanges[i].max = mr.max + mr.trans
+					seedRanges[i].id++
+					break
+
+				} else if sr.min < mr.max && sr.max > mr.max && sr.min >= mr.min {
+					seedRanges = append(seedRanges, seedRange{
+						id: sr.id,
+						numRange: numRange{
+							min: mr.max,
+							max: sr.max,
+						},
+					})
+					seedRanges[i].min = sr.min + mr.trans
+					seedRanges[i].max = mr.max + mr.trans
+					seedRanges[i].id++
+					break
+
+				} else if sr.max > mr.min && sr.min < mr.max && sr.max <= mr.max {
+					seedRanges = append(seedRanges, seedRange{
+						id: sr.id,
+						numRange: numRange{
+							min: sr.min,
+							max: mr.min,
+						},
+					})
+					seedRanges[i].min = mr.min + mr.trans
+					seedRanges[i].max = sr.max + mr.trans
+					seedRanges[i].id++
+					break
+				}
+			}
+		}
+
+		for _, sr := range seedRanges {
+			if sr.id != loc {
+				continue main
+			}
+		}
+		break
+	}
+
+	for i, seedRange := range seedRanges {
+		if i == 1 {
+			min = seedRange.min
+		}
+		if seedRange.min < min {
+			min = seedRange.min
 		}
 	}
 	return min
