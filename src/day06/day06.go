@@ -16,6 +16,7 @@ func Main() {
 	}
 
 	fmt.Printf("day six part one: %d\n", part1(string(file)))
+	fmt.Printf("day six part two: %d\n", part2(string(file)))
 }
 
 var numRe = regexp.MustCompile(`\d+`)
@@ -62,4 +63,38 @@ func part1(input string) (prod int) {
 		}
 	}
 	return prod
+}
+
+func processRace(input string) (race race) {
+	for i, line := range strings.Split(input, "\n") {
+		var build strings.Builder
+
+		for _, sNum := range numRe.FindAllString(line, -1) {
+			build.WriteString(sNum)
+		}
+		dNum, err := strconv.Atoi(build.String())
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if i == 0 {
+			race.time = dNum
+		} else if i == 1 {
+			race.dist = dNum
+		}
+	}
+	return race
+}
+
+func part2(input string) (comb int) {
+	race := processRace(input)
+	for ms := 0; ms <= race.time; ms++ {
+		att := ms * (race.time - ms)
+
+		if att > race.dist {
+			race.comb = (race.time - ms) - ms + 1
+			break
+		}
+	}
+	return race.comb
 }

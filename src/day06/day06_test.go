@@ -45,3 +45,18 @@ func TestD6p1(t *testing.T) {
 		})
 	}
 }
+
+func TestD6p2(t *testing.T) {
+	testCases := []testCase{
+		{"example", example, 71503},
+		{"input", input, 27340847},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			if result := part2(*tc.input); result != tc.expected {
+				t.Errorf("(d6p1) got %d, need %d", result, tc.expected)
+			}
+		})
+	}
+}
