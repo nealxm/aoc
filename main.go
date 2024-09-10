@@ -6,6 +6,7 @@ import (
 	"aoc2023/src/day03"
 	"aoc2023/src/day04"
 	"aoc2023/src/day05"
+	"aoc2023/src/day06"
 	"log"
 	"os"
 )
@@ -26,6 +27,8 @@ func main() {
 		day04.Main()
 	case "5":
 		day05.Main()
+	case "6":
+		day06.Main()
 	default:
 		log.Fatalln("invalid day specified: either not implemented or not 1-25")
 	}
