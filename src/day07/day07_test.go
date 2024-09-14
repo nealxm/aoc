@@ -9,7 +9,7 @@ import (
 var example, input *string
 
 func TestMain(m *testing.M) {
-	example1File, err := os.ReadFile("./data/example.txt")
+	exampleFile, err := os.ReadFile("./data/example.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -18,7 +18,7 @@ func TestMain(m *testing.M) {
 		log.Fatal(err)
 	}
 
-	e, i := string(example1File), string(inputFile)
+	e, i := string(exampleFile), string(inputFile)
 	example, input = &e, &i
 
 	code := m.Run()
