@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var example1, example2, input *string
+var example1, example2, example3, input *string
 
 func TestMain(m *testing.M) {
 	example1File, err := os.ReadFile("./data/example1.txt")
@@ -17,13 +17,17 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	example3File, err := os.ReadFile("./data/example3.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
 	inputFile, err := os.ReadFile("./data/input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	e1, e2, i := string(example1File), string(example2File), string(inputFile)
-	example1, example2, input = &e1, &e2, &i
+	e1, e2, e3, i := string(example1File), string(example2File), string(example3File), string(inputFile)
+	example1, example2, example3, input = &e1, &e2, &e3, &i
 
 	code := m.Run()
 	os.Exit(code)
@@ -45,7 +49,22 @@ func TestD8p1(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			if result := part1(*tc.input); result != tc.expected {
-				t.Errorf("(d7p1) got %d, need %d", result, tc.expected)
+				t.Errorf("(d8p1) got %d, need %d", result, tc.expected)
+			}
+		})
+	}
+}
+
+func TestD8p2(t *testing.T) {
+	testCases := []testCase{
+		{"example3", example3, 6},
+		{"input", input, 18024643846273},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			if result := part2(*tc.input); result != tc.expected {
+				t.Errorf("(d8p2) got %d, need %d", result, tc.expected)
 			}
 		})
 	}
