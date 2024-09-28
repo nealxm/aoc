@@ -15,14 +15,14 @@ func Main() {
 	}
 
 	fmt.Printf("day eleven part one: %d\n", part1(string(file)))
+	fmt.Printf("day eleven part two: %d\n", part2(string(file)))
 }
 
 type vec2 struct {
 	r, c int
 }
 
-func processInput(input string) []vec2 {
-	lines := strings.Split(input, "\n")
+func findGalaxies(lines []string) ([]bool, []bool) {
 	rows := make([]bool, len(lines))
 	cols := make([]bool, len(lines[0]))
 
@@ -33,6 +33,12 @@ func processInput(input string) []vec2 {
 			}
 		}
 	}
+	return rows, cols
+}
+
+func processInput1(input string) (galaxies []vec2) {
+	lines := strings.Split(input, "\n")
+	rows, cols := findGalaxies(lines)
 	grid := [][]string{}
 
 	for r, line := range lines {
@@ -53,7 +59,6 @@ func processInput(input string) []vec2 {
 			grid = append(grid, gridRow)
 		}
 	}
-	galaxies := []vec2{}
 
 	for r, row := range grid {
 		for c, chr := range row {
@@ -69,8 +74,7 @@ func encode(a, b int) int {
 	return ((a + b) * (a + b + 1) / 2) + b
 }
 
-func part1(input string) (sum int) {
-	galaxies := processInput(input)
+func processGalaxies(galaxies []vec2) (sum int) {
 	seen := make(map[int]bool)
 
 	for i, galaxya := range galaxies {
@@ -83,4 +87,43 @@ func part1(input string) (sum int) {
 		}
 	}
 	return sum
+}
+
+func part1(input string) int {
+	return processGalaxies(processInput1(input))
+}
+
+func processInput2(input string) (galaxies []vec2) {
+	lines := strings.Split(input, "\n")
+	rows, cols := findGalaxies(lines)
+	rowOffset := make([]int, len(rows))
+	colOffset := make([]int, len(cols))
+	totalRowOffset := 0
+	totalColOffset := 0
+
+	for r, row := range rows {
+		if !row {
+			totalRowOffset += 999999
+		}
+		rowOffset[r] = totalRowOffset
+	}
+	for c, col := range cols {
+		if !col {
+			totalColOffset += 999999
+		}
+		colOffset[c] = totalColOffset
+	}
+
+	for r, line := range lines {
+		for c, chr := range line {
+			if chr == '#' {
+				galaxies = append(galaxies, vec2{r + rowOffset[r], c + colOffset[c]})
+			}
+		}
+	}
+	return galaxies
+}
+
+func part2(input string) int {
+	return processGalaxies(processInput2(input))
 }
