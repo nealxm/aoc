@@ -34,6 +34,7 @@ type testCase struct {
 func TestD12p1(t *testing.T) {
 	testCases := []testCase{
 		{"example", example, 21},
+		{"input", input, 7599},
 	}
 
 	for _, tc := range testCases {

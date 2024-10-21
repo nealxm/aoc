@@ -18,30 +18,15 @@ func Main() {
 }
 
 type rowCond struct {
-	rle    string
-	groups []uint8
+	springs string
+	groups  []uint8
 }
 
 func processInput(input string) (springRows []rowCond) {
 	for i, line := range strings.Split(input, "\n") {
 		for j, part := range strings.Split(line, " ") {
 			if j == 0 {
-				var encoded strings.Builder
-				count := 1
-
-				for k := 1; k < len(part); k++ {
-					if part[k] == part[k-1] {
-						count++
-					} else {
-						encoded.WriteString(string(part[k-1]))
-						encoded.WriteString(strconv.Itoa(count))
-						count = 1
-					}
-				}
-				encoded.WriteString(string(part[len(part)-1]))
-				encoded.WriteString(strconv.Itoa(count))
-
-				springRows = append(springRows, rowCond{rle: encoded.String()})
+				springRows = append(springRows, rowCond{springs: part})
 			} else if j == 1 {
 				for _, aNum := range strings.Split(part, ",") {
 					iNum, err := strconv.ParseInt(aNum, 10, 8)
@@ -56,9 +41,56 @@ func processInput(input string) (springRows []rowCond) {
 	return springRows
 }
 
-func part1(input string) (sum int) {
-	for _, springRow := range processInput(input) {
-
+func validRow(rc rowCond) bool {
+	var (
+		curr, j uint8
+	)
+	for i, spring := range rc.springs {
+		if spring == '?' {
+			return false
+		} else if spring == '#' {
+			if i == len(rc.springs)-1 || rc.springs[i+1] == '.' || rc.springs[i+1] == '?' {
+				curr++
+				if j >= uint8(len(rc.groups)) || curr != rc.groups[j] {
+					return false
+				} else {
+					j++
+					curr = 0
+				}
+			} else if rc.springs[i+1] == '#' {
+				curr++
+			}
+		}
 	}
+	if j != uint8(len(rc.groups)) {
+		return false
+	}
+	return true
+}
+
+func part1(input string) (sum int) {
+	var buildRow func(rowCond) int
+
+	buildRow = func(rc rowCond) int {
+		if validRow(rc) {
+			return 1
+		}
+		idx := strings.IndexRune(rc.springs, '?')
+		if idx == -1 {
+			return 0
+		}
+		return buildRow(rowCond{
+			springs: rc.springs[:idx] + "." + rc.springs[idx+1:],
+			groups:  rc.groups,
+		}) + buildRow(rowCond{
+			springs: rc.springs[:idx] + "#" + rc.springs[idx+1:],
+			groups:  rc.groups,
+		})
+	}
+
+	for _, springRow := range processInput(input) {
+		sum += buildRow(springRow)
+	}
+
 	return sum
 }
