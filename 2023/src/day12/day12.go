@@ -15,6 +15,7 @@ func Main() {
 	}
 
 	fmt.Printf("day twelve part one: %d\n", part1(string(file)))
+	fmt.Printf("day twelve part two: %d\n", part2(string(file)))
 }
 
 type rowCond struct {
@@ -22,7 +23,7 @@ type rowCond struct {
 	groups  []uint8
 }
 
-func processInput(input string) (springRows []rowCond) {
+func processInput1(input string) (springRows []rowCond) {
 	for i, line := range strings.Split(input, "\n") {
 		for j, part := range strings.Split(line, " ") {
 			if j == 0 {
@@ -41,39 +42,53 @@ func processInput(input string) (springRows []rowCond) {
 	return springRows
 }
 
-func validRow(rc rowCond) bool {
+type rowState uint8
+
+const (
+	valid rowState = iota
+	invalid
+	earlyInvalid
+)
+
+func validRow(rc rowCond) rowState {
 	var (
 		curr, j uint8
 	)
 	for i, spring := range rc.springs {
-		if spring == '?' {
-			return false
-		} else if spring == '#' {
-			if i == len(rc.springs)-1 || rc.springs[i+1] == '.' || rc.springs[i+1] == '?' {
-				curr++
+		switch spring {
+		case '?':
+			return invalid
+		case '#':
+			curr++
+			if i == len(rc.springs)-1 || rc.springs[i+1] == '.' {
 				if j >= uint8(len(rc.groups)) || curr != rc.groups[j] {
-					return false
-				} else {
-					j++
-					curr = 0
+					return earlyInvalid
 				}
-			} else if rc.springs[i+1] == '#' {
-				curr++
+				j++
+				curr = 0
+			} else if rc.springs[i+1] == '?' {
+				if j >= uint8(len(rc.groups)) || curr > rc.groups[j] {
+					return earlyInvalid
+				}
+				j++
+				curr = 0
 			}
 		}
 	}
 	if j != uint8(len(rc.groups)) {
-		return false
+		return earlyInvalid
 	}
-	return true
+	return valid
 }
 
-func part1(input string) (sum int) {
+func computeSum(rowConds []rowCond) (sum int) {
 	var buildRow func(rowCond) int
 
 	buildRow = func(rc rowCond) int {
-		if validRow(rc) {
+		if state := validRow(rc); state == valid {
 			return 1
+		} else if state == earlyInvalid {
+			return 0
 		}
 		idx := strings.IndexRune(rc.springs, '?')
 		if idx == -1 {
@@ -87,10 +102,38 @@ func part1(input string) (sum int) {
 			groups:  rc.groups,
 		})
 	}
-
-	for _, springRow := range processInput(input) {
+	for _, springRow := range rowConds {
 		sum += buildRow(springRow)
 	}
-
 	return sum
+}
+
+func part1(input string) int {
+	return computeSum(processInput1(input))
+}
+
+func processInput2(input string) (springRows []rowCond) {
+	for _, springRow := range processInput1(input) {
+		var (
+			newSprings strings.Builder
+			newGroups  []uint8
+		)
+
+		for i := 0; i < 5; i++ {
+			newSprings.WriteString(springRow.springs)
+			newGroups = append(newGroups, springRow.groups...)
+			if i < 4 {
+				newSprings.WriteByte('?')
+			}
+		}
+		springRows = append(springRows, rowCond{
+			springs: newSprings.String(),
+			groups:  newGroups,
+		})
+	}
+	return springRows
+}
+
+func part2(input string) (sum int) {
+	return computeSum(processInput2(input))
 }
