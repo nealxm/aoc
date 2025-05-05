@@ -42,68 +42,59 @@ func processInput1(input string) (springRows []rowCond) {
 	return springRows
 }
 
-type rowState uint8
+func countArrangements(springs string, groups []uint8, cache map[string]int) (result int) {
+	key := fmt.Sprintf("%s|%v", springs, groups)
+	if val, exists := cache[key]; exists {
+		return val
+	}
+	if len(springs) == 0 {
+		if len(groups) == 0 {
+			return 1
+		}
+		return 0
+	}
+	if len(groups) == 0 {
+		if strings.IndexByte(springs, '#') != -1 {
+			return 0
+		}
+		return 1
+	}
 
-const (
-	valid rowState = iota
-	invalid
-	earlyInvalid
-)
+	if springs[0] == '.' || springs[0] == '?' {
+		result += countArrangements(springs[1:], groups, cache)
+	}
+	if springs[0] == '#' || springs[0] == '?' {
+		currentGroup := int(groups[0])
+		if currentGroup <= len(springs) {
+			canPlace := true
 
-func validRow(rc rowCond) rowState {
-	var (
-		curr, j uint8
-	)
-	for i, spring := range rc.springs {
-		switch spring {
-		case '?':
-			return invalid
-		case '#':
-			curr++
-			if i == len(rc.springs)-1 || rc.springs[i+1] == '.' {
-				if j >= uint8(len(rc.groups)) || curr != rc.groups[j] {
-					return earlyInvalid
+			for i := range currentGroup {
+				if springs[i] == '.' {
+					canPlace = false
+					break
 				}
-				j++
-				curr = 0
-			} else if rc.springs[i+1] == '?' {
-				if j >= uint8(len(rc.groups)) || curr > rc.groups[j] {
-					return earlyInvalid
+			}
+			if canPlace && currentGroup < len(springs) && springs[currentGroup] == '#' {
+				canPlace = false
+			}
+			if canPlace {
+				newPos := int(groups[0])
+				if newPos < len(springs) {
+					newPos++
 				}
-				j++
-				curr = 0
+				result += countArrangements(springs[newPos:], groups[1:], cache)
 			}
 		}
 	}
-	if j != uint8(len(rc.groups)) {
-		return earlyInvalid
-	}
-	return valid
+	cache[key] = result
+	return result
 }
 
 func computeSum(rowConds []rowCond) (sum int) {
-	var buildRow func(rowCond) int
-
-	buildRow = func(rc rowCond) int {
-		if state := validRow(rc); state == valid {
-			return 1
-		} else if state == earlyInvalid {
-			return 0
-		}
-		idx := strings.IndexRune(rc.springs, '?')
-		if idx == -1 {
-			return 0
-		}
-		return buildRow(rowCond{
-			springs: rc.springs[:idx] + "." + rc.springs[idx+1:],
-			groups:  rc.groups,
-		}) + buildRow(rowCond{
-			springs: rc.springs[:idx] + "#" + rc.springs[idx+1:],
-			groups:  rc.groups,
-		})
-	}
-	for _, springRow := range rowConds {
-		sum += buildRow(springRow)
+	for _, rc := range rowConds {
+		cache := make(map[string]int)
+		arrangements := countArrangements(rc.springs, rc.groups, cache)
+		sum += arrangements
 	}
 	return sum
 }
@@ -119,11 +110,11 @@ func processInput2(input string) (springRows []rowCond) {
 			newGroups  []uint8
 		)
 
-		for i := 0; i < 5; i++ {
+		for i := range 5 {
 			newSprings.WriteString(springRow.springs)
 			newGroups = append(newGroups, springRow.groups...)
 			if i < 4 {
-				newSprings.WriteByte('?')
+				newSprings.WriteRune('?')
 			}
 		}
 		springRows = append(springRows, rowCond{
@@ -134,6 +125,6 @@ func processInput2(input string) (springRows []rowCond) {
 	return springRows
 }
 
-func part2(input string) (sum int) {
+func part2(input string) int {
 	return computeSum(processInput2(input))
 }
