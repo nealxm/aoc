@@ -13,8 +13,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day twelve part one: %d\n", part1(string(file)))
-	// fmt.Printf("day twelve part two: %d\n", part2(string(file)))
+	fmt.Printf("day thirteen part one: %d\n", part1(string(file)))
+	fmt.Printf("day thirteen part two: %d\n", part2(string(file)))
 }
 
 type grid struct {
@@ -68,8 +68,44 @@ func part1(input string) (sum int) {
 	return sum
 }
 
+func findNewReflection(lines []string) int {
+	len := len(lines)
+	originalReflection := findReflection(lines)
+
+outer:
+	for i := range len - 1 {
+		if i+1 == originalReflection {
+			continue
+		}
+		totalDiff := 0
+
+		for offset := 0; ; offset++ {
+			l := i - offset
+			r := i + 1 + offset
+
+			if l < 0 || r >= len {
+				if totalDiff == 1 {
+					return i + 1
+				}
+				continue outer
+			}
+			for j := range lines[l] {
+				if lines[l][j] != lines[r][j] {
+					totalDiff++
+
+					if totalDiff > 1 {
+						continue outer
+					}
+				}
+			}
+		}
+	}
+	return 0
+}
+
 func part2(input string) (sum int) {
 	for _, grid := range parseInput(input) {
+		sum += (100 * findNewReflection(grid.rows)) + findNewReflection(grid.cols)
 	}
 	return sum
 }
