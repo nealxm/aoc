@@ -31,7 +31,7 @@ type testCase struct {
 	expected int
 }
 
-func TestD13p1(t *testing.T) {
+func TestD14p1(t *testing.T) {
 	testCases := []testCase{
 		{"example", example, 136},
 		{"input", input, 112773},
@@ -46,7 +46,7 @@ func TestD13p1(t *testing.T) {
 	}
 }
 
-func TestD12p2(t *testing.T) {
+func TestD14p2(t *testing.T) {
 	testCases := []testCase{
 		{"example", example, 64},
 		{"input", input, 98894},

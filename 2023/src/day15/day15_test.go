@@ -1,4 +1,4 @@
-package day13
+package day15
 
 import (
 	"log"
@@ -31,31 +31,31 @@ type testCase struct {
 	expected int
 }
 
-func TestD13p1(t *testing.T) {
+func TestD14p1(t *testing.T) {
 	testCases := []testCase{
-		{"example", example, 405},
-		{"input", input, 35538},
+		{"example", example, 1320},
+		// {"input", input, 112773},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			if result := part1(*tc.input); result != tc.expected {
-				t.Errorf("(d13p1) got %d, need %d", result, tc.expected)
+				t.Errorf("(d14p1) got %d, need %d", result, tc.expected)
 			}
 		})
 	}
 }
 
-func TestD13p2(t *testing.T) {
+func TestD14p2(t *testing.T) {
 	testCases := []testCase{
-		{"example", example, 400},
-		{"input", input, 30442},
+		// {"example", example, 64},
+		// {"input", input, 98894},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			if result := part2(*tc.input); result != tc.expected {
-				t.Errorf("(d13p2) got %d, need %d", result, tc.expected)
+				t.Errorf("(d14p2) got %d, need %d", result, tc.expected)
 			}
 		})
 	}
