@@ -6,10 +6,14 @@ import (
 	"testing"
 )
 
-var example, input *string
+var example1, example2, input *string
 
 func TestMain(m *testing.M) {
-	exampleFile, err := os.ReadFile("./data/example.txt")
+	example1File, err := os.ReadFile("./data/example1.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	example2File, err := os.ReadFile("./data/example2.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -18,8 +22,8 @@ func TestMain(m *testing.M) {
 		log.Fatal(err)
 	}
 
-	e, i := string(exampleFile), string(inputFile)
-	example, input = &e, &i
+	e1, e2, i := string(example1File), string(example2File), string(inputFile)
+	example1, example2, input = &e1, &e2, &i
 
 	code := m.Run()
 	os.Exit(code)
@@ -31,22 +35,23 @@ type testCase struct {
 	expected int
 }
 
-func TestD14p1(t *testing.T) {
+func TestD15p1(t *testing.T) {
 	testCases := []testCase{
-		{"example", example, 1320},
-		// {"input", input, 112773},
+		{"example1", example1, 52},
+		{"example2", example2, 1320},
+		{"input", input, 505427},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			if result := part1(*tc.input); result != tc.expected {
-				t.Errorf("(d14p1) got %d, need %d", result, tc.expected)
+				t.Errorf("(d15p1) got %d, need %d", result, tc.expected)
 			}
 		})
 	}
 }
 
-func TestD14p2(t *testing.T) {
+func TestD15p2(t *testing.T) {
 	testCases := []testCase{
 		// {"example", example, 64},
 		// {"input", input, 98894},
@@ -55,7 +60,7 @@ func TestD14p2(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			if result := part2(*tc.input); result != tc.expected {
-				t.Errorf("(d14p2) got %d, need %d", result, tc.expected)
+				t.Errorf("(d15p2) got %d, need %d", result, tc.expected)
 			}
 		})
 	}
