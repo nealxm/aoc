@@ -47,7 +47,10 @@ func TestD16p1(t *testing.T) {
 }
 
 func TestD16p2(t *testing.T) {
-	testCases := []testCase{}
+	testCases := []testCase{
+		{"example", example, 51},
+		{"input", input, 7154},
+	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {

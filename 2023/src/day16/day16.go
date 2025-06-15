@@ -54,6 +54,13 @@ var (
 	}
 )
 
+func parseInput(input string) (grid [][]byte) {
+	for _, line := range strings.Split(input, "\n") {
+		grid = append(grid, []byte(line))
+	}
+	return grid
+}
+
 func moveBeam(b beam) beam {
 	var offset [2]int16
 	switch b.dir {
@@ -69,22 +76,12 @@ func moveBeam(b beam) beam {
 	return beam{b.row + offset[0], b.col + offset[1], b.dir}
 }
 
-func parseInput(input string) (grid [][]byte) {
-	for _, line := range strings.Split(input, "\n") {
-		grid = append(grid, []byte(line))
-	}
-	return grid
-}
-
-func part1(input string) int {
+func processBeam(grid [][]byte, start beam) int {
 	s := &state{
-		parseInput(input),
+		grid,
 		make(map[[2]int16]map[direction]bool),
 		make(map[[2]int16]bool),
-		[]beam{beam{
-			0, 0,
-			right,
-		}},
+		[]beam{start},
 	}
 	for len(s.activeBeams) > 0 {
 		curr := s.activeBeams[0]
@@ -146,6 +143,77 @@ func part1(input string) int {
 	return len(s.energized)
 }
 
-func part2(input string) int {
-	return 0
+func part1(input string) int {
+	return processBeam(parseInput(input), beam{
+		0, 0,
+		right,
+	})
+}
+
+func part2(input string) (maxE int) {
+	grid := parseInput(input)
+	for r, row := range grid {
+		for c := range row {
+			if !(r == 0 || r == len(grid)-1 || c == 0 || c == len(row)-1) {
+				continue
+			}
+
+			if r == 0 && c == 0 {
+				maxE = max(maxE, processBeam(grid, beam{
+					int16(r), int16(c),
+					right,
+				}), processBeam(grid, beam{
+					int16(r), int16(c),
+					down,
+				}))
+			} else if r == 0 && c == len(row)-1 {
+				maxE = max(maxE, processBeam(grid, beam{
+					int16(r), int16(c),
+					down,
+				}), processBeam(grid, beam{
+					int16(r), int16(c),
+					left,
+				}))
+			} else if r == len(grid)-1 && c == len(row)-1 {
+				maxE = max(maxE, processBeam(grid, beam{
+					int16(r), int16(c),
+					up,
+				}), processBeam(grid, beam{
+					int16(r), int16(c),
+					left,
+				}))
+			} else if r == len(grid)-1 && c == 0 {
+				maxE = max(maxE, processBeam(grid, beam{
+					int16(r), int16(c),
+					up,
+				}), processBeam(grid, beam{
+					int16(r), int16(c),
+					right,
+				}))
+			} else {
+				if r == 0 {
+					maxE = max(maxE, processBeam(grid, beam{
+						int16(r), int16(c),
+						down,
+					}))
+				} else if c == len(row)-1 {
+					maxE = max(maxE, processBeam(grid, beam{
+						int16(r), int16(c),
+						left,
+					}))
+				} else if r == len(grid)-1 {
+					maxE = max(maxE, processBeam(grid, beam{
+						int16(r), int16(c),
+						up,
+					}))
+				} else if c == 0 {
+					maxE = max(maxE, processBeam(grid, beam{
+						int16(r), int16(c),
+						right,
+					}))
+				}
+			}
+		}
+	}
+	return maxE
 }
