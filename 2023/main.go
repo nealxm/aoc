@@ -16,6 +16,7 @@ import (
 	"aoc2023/src/day13"
 	"aoc2023/src/day14"
 	"aoc2023/src/day15"
+	"aoc2023/src/day16"
 	"log"
 	"os"
 )
@@ -36,6 +37,7 @@ var funcs = map[string]func(){
 	"13": day13.Main,
 	"14": day14.Main,
 	"15": day15.Main,
+	"16": day16.Main,
 }
 
 func main() {
