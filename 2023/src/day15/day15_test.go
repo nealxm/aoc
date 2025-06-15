@@ -53,8 +53,8 @@ func TestD15p1(t *testing.T) {
 
 func TestD15p2(t *testing.T) {
 	testCases := []testCase{
-		// {"example", example, 64},
-		// {"input", input, 98894},
+		{"example2", example2, 145},
+		{"input", input, 243747},
 	}
 
 	for _, tc := range testCases {
