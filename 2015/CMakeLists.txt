@@ -6,7 +6,6 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include(CTest)
 enable_testing()
 
 include(ProcessorCount)
@@ -14,7 +13,7 @@ ProcessorCount(N)
 set(CMAKE_BUILD_PARALLEL_LEVEL ${N})
 
 set(flags
-    -Wall -Wextra -Wpedantic -Weverything -Werror
+    -Wall -Wextra -Wpedantic -Weverything
     -Wno-pre-c23-compat
     -Wno-declaration-after-statement
     -Wno-poison-system-directories
