@@ -1,5 +1,8 @@
 #pragma once
 
-#include <stdio.h>
+char* file_to_string(const char*);
 
-char* file_to_string(const char* filename);
+void   free_array(void**);
+char** file_to_array(const char*);
+
+int min(int, ...);

@@ -1,9 +1,11 @@
 #include "day01.h"
+
 #include "utils.h"
+
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 
 void day01_main(void) {
     char* input = file_to_string("./src/day01/data/input.txt");
@@ -12,7 +14,7 @@ void day01_main(void) {
     free(input);
 }
 
-int day01_part1(const char *input) {
+int day01_part1(const char* input) {
     int floor = 0;
     for (const char* i = input; *i != '\0'; i++) {
         if (*i == '(') {
@@ -24,7 +26,7 @@ int day01_part1(const char *input) {
     return floor;
 }
 
-int day01_part2(const char *input) {
+int day01_part2(const char* input) {
     int floor = 0;
     for (int i = 0; input[i] != '\0'; i++) {
         if (input[i] == '(') {

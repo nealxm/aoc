@@ -1,5 +1,6 @@
 #include "day01.h"
 #include "utils.h"
+
 #include <assert.h>
 
 int main(void) {

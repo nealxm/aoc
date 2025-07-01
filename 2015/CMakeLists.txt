@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
+SET(CMAKE_C_COMPILER "/opt/homebrew/opt/llvm/bin/clang")
 project(aoc2015 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 23)
@@ -17,7 +18,7 @@ set(flags
     -Wno-pre-c23-compat
     -Wno-declaration-after-statement
     -Wno-poison-system-directories
-    -Wno-missing-prototypes
+    -Wno-unsafe-buffer-usage
     -DDEBUG -g -O3
 )
 
