@@ -48,10 +48,10 @@ BitFieldColonSpacing: Both
 
 BreakAdjacentStringLiterals: false
 BreakArrays: false
-BreakBeforeBinaryOperators: All
+BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: true
-BreakBinaryOperations: OnePerLine
+BreakBinaryOperations: RespectPrecedence
 BreakFunctionDefinitionParameters: false
 BreakStringLiterals: true
 

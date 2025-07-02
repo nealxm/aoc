@@ -10,13 +10,16 @@ typedef struct {
     int x, y;
 } pos;
 
-//int64 to get rid of additional padding
 typedef struct {
     const char* dirs;
-    pos         curr;
+    pos         curr, curr_r;
     pos*        visited;
-    int64_t     visited_len;
+    int         visited_len;
+    int         _; //padding
 } state;
 
-state* parse_input(const char*);
+state* state_init(const char*);
+void   state_free(state*);
+int    pos_move(pos*, char);
 bool   pos_equal(pos a, pos b);
+int    visited_add(pos**, int*, pos*);

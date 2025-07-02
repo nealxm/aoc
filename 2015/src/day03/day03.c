@@ -14,63 +14,93 @@ void day03_main(void) {
 }
 
 int day03_part1(const char* input) {
-    state* s = parse_input(input);
-    for (const char* d = s->dirs; *d != '\0'; d++) {
-        switch (*d) {
-        case '^': s->curr.y++; break;
-        case '>': s->curr.x++; break;
-        case 'v': s->curr.y--; break;
-        case '<': s->curr.x--; break;
-        default : {
-            fprintf(stderr, "invalid direction '%c'", *d);
-            free(s->visited);
-            free(s);
-            exit(1);
-        }
-        }
-        bool found = false;
-        for (int v = 0; v < s->visited_len; v++) {
-            if (pos_equal(s->visited[v], s->curr)) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            pos* visited_new = realloc(s->visited, sizeof(pos) * (size_t)(s->visited_len + 1));
-            if (!visited_new) {
-                fprintf(stderr, "could not reallocate memory for new visited");
-                free(s->visited);
-                free(s);
-                exit(1);
-            }
-            s->visited                     = visited_new;
-            s->visited[s->visited_len - 1] = s->curr;
-            s->visited_len++;
+    state* s = state_init(input);
+    int    r = -1;
+
+    for (const char* d = s->dirs; *d != '\0'; ++d) {
+        if (pos_move(&s->curr, *d) != 0
+            || visited_add(&s->visited, &s->visited_len, &s->curr) != 0) {
+            goto cleanup;
         }
     }
-    int r = (int)s->visited_len;
-    free(s->visited);
-    free(s);
+    r = s->visited_len;
+
+cleanup:
+    state_free(s);
+    if (r == -1) {
+        exit(1);
+    }
     return r;
 }
 
-int day03_part2(const char*) {
-    return 0;
+int day03_part2(const char* input) {
+    state* s = state_init(input);
+    int    r = -1;
+
+    for (int i = 0; s->dirs[i] != '\0'; ++i) {
+        pos* curr_adj = (i % 2 == 0) ? &s->curr : &s->curr_r;
+
+        if (pos_move(curr_adj, s->dirs[i]) != 0
+            || visited_add(&s->visited, &s->visited_len, curr_adj) != 0) {
+            goto cleanup;
+        }
+    }
+    r = s->visited_len;
+
+cleanup:
+    state_free(s);
+    if (r == -1) {
+        exit(1);
+    }
+    return r;
 }
 
-state* parse_input(const char* input) {
+state* state_init(const char* input) {
     state* s = malloc(sizeof(state));
 
     *s = (state){
         .dirs        = input,
         .curr        = {0, 0},
-        .visited     = malloc(sizeof(pos)),
+        .curr_r      = {0, 0},
         .visited_len = 1,
+        .visited     = malloc(sizeof(pos)),
     };
-    s->visited[0] = s->curr;
+    s->visited[0] = (pos){0, 0};
     return s;
+}
+
+void state_free(state* s) {
+    free(s->visited);
+    free(s);
+}
+
+int pos_move(pos* p, char d) {
+    switch (d) {
+    case '^': ++p->y; break;
+    case '>': ++p->x; break;
+    case 'v': --p->y; break;
+    case '<': --p->x; break;
+    default : fprintf(stderr, "invalid direction '%c'", d); return 1;
+    }
+    return 0;
 }
 
 bool pos_equal(pos a, pos b) {
     return (bool)(a.x == b.x && a.y == b.y);
+}
+
+int visited_add(pos** v, int* l, pos* n) {
+    for (int i = 0; i < *l; ++i) {
+        if (pos_equal((*v)[i], *n)) {
+            return 0;
+        }
+    }
+    pos* visited_new = realloc(*v, sizeof(pos) * (size_t)(++(*l)));
+    if (!visited_new) {
+        fprintf(stderr, "could not reallocate memory for new visited");
+        return 1;
+    }
+    *v           = visited_new;
+    (*v)[*l - 1] = *n;
+    return 0;
 }

@@ -25,8 +25,8 @@ int main(int argc, char* argv[]) {
 
     if (d < 1 || d > 25) {
         fprintf(stderr, "invalid day: either not implemented or not 1-25\n");
-    } else {
-        days[d - 1].func();
+        return 1;
     }
+    days[d - 1].func();
     return 0;
 }
