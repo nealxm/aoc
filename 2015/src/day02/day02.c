@@ -18,7 +18,7 @@ int day02_part1(char** input) {
         int l, w, h;
         if (sscanf(*i, "%dx%dx%d", &l, &w, &h) != 3) {
             fprintf(stderr, "failed to parse line '%s'", *i);
-            break;
+            exit(1);
         }
         int s1  = l * w;
         int s2  = w * h;
@@ -34,7 +34,7 @@ int day02_part2(char** input) {
         int l, w, h;
         if (sscanf(*i, "%dx%dx%d", &l, &w, &h) != 3) {
             fprintf(stderr, "failed to parse line '%s'", *i);
-            break;
+            exit(1);
         }
         total += 2 * (l + w + h - max(3, l, w, h)) + (l * w * h);
     }
