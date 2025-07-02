@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 4.0.0)
 SET(CMAKE_C_COMPILER "/opt/homebrew/opt/llvm/bin/clang")
 project(aoc2015 LANGUAGES C)
 
@@ -7,11 +7,16 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+include(CTest)
 enable_testing()
 
 include(ProcessorCount)
 ProcessorCount(N)
 set(CMAKE_BUILD_PARALLEL_LEVEL ${N})
+set(CTEST_PARALLEL_LEVEL ${N})
+set_property(GLOBAL PROPERTY JOB_POOLS default=${N})
+set(CMAKE_JOB_POOL_COMPILE default)
+set(CMAKE_JOB_POOL_LINK default)
 
 set(flags
     -Wall -Wextra -Wpedantic -Weverything

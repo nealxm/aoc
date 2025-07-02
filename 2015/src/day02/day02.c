@@ -28,6 +28,15 @@ int day02_part1(char** input) {
     return total;
 }
 
-int day02_part2(char**) {
-    return 0;
+int day02_part2(char** input) {
+    int total = 0;
+    for (char** i = input; *i != nullptr; i++) {
+        int l, w, h;
+        if (sscanf(*i, "%dx%dx%d", &l, &w, &h) != 3) {
+            fprintf(stderr, "failed to parse line '%s'", *i);
+            break;
+        }
+        total += 2 * (l + w + h - max(3, l, w, h)) + (l * w * h);
+    }
+    return total;
 }
