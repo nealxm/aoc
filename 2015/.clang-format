@@ -42,7 +42,7 @@ AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
 
 AlwaysBreakBeforeMultilineStrings: true
-BinPackArguments: true
+BinPackArguments: false
 BinPackParameters: true
 BitFieldColonSpacing: Both
 
@@ -85,7 +85,7 @@ RemoveBracesLLVM: false
 RemoveEmptyLinesInUnwrappedLines: true
 RemoveParentheses: ReturnStatement
 RemoveSemicolon: true
-SkipMacroDefinitionBody: false
+SkipMacroDefinitionBody: true
 SortIncludes: true
 
 SpaceAfterCStyleCast: false

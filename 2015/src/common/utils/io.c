@@ -1,9 +1,5 @@
 #include "utils.h"
 
-#include <limits.h>
-#include <stdarg.h>
-#include <stddef.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,15 +39,6 @@ char* file_to_string(const char* file) {
     return string;
 }
 
-void free_array(void** array) {
-    if (!array) {
-        return;
-    }
-    for (int i = 0; array[i] != nullptr; i++) {
-        free(array[i]);
-    }
-    free((void*)array);
-}
 
 char** file_to_array(const char* file) {
     FILE* f = fopen(file, "r");
@@ -74,41 +61,10 @@ char** file_to_array(const char* file) {
         }
         lines = lines_new;
 
-        lines[lines_len]     = strdup(line);
-        lines[lines_len + 1] = nullptr;
-        lines_len++;
+        lines[lines_len]   = strdup(line);
+        lines[++lines_len] = nullptr;
     }
     free(line);
     fclose(f);
     return lines;
-}
-
-int min(int count, ...) {
-    va_list args;
-    va_start(args, count);
-
-    int min = INT_MAX;
-    for (int i = 0; i < count; i++) {
-        int val = va_arg(args, int);
-        if (val < min) {
-            min = val;
-        }
-    }
-    va_end(args);
-    return min;
-}
-
-int max(int count, ...) {
-    va_list args;
-    va_start(args, count);
-
-    int max = INT_MIN;
-    for (int i = 0; i < count; i++) {
-        int val = va_arg(args, int);
-        if (val > max) {
-            max = val;
-        }
-    }
-    va_end(args);
-    return max;
 }

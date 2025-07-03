@@ -80,7 +80,7 @@ int pos_move(pos* p, char d) {
     case '>': ++p->x; break;
     case 'v': --p->y; break;
     case '<': --p->x; break;
-    default : fprintf(stderr, "invalid direction '%c'", d); return 1;
+    default : fprintf(stderr, "invalid direction '%c'\n", d); return 1;
     }
     return 0;
 }
@@ -97,7 +97,7 @@ int visited_add(pos** v, int* l, pos* n) {
     }
     pos* visited_new = realloc(*v, sizeof(pos) * (size_t)(++(*l)));
     if (!visited_new) {
-        fprintf(stderr, "could not reallocate memory for new visited");
+        fprintf(stderr, "could not reallocate memory for new visited\n");
         return 1;
     }
     *v           = visited_new;

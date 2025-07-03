@@ -16,7 +16,7 @@ static day days[25] = {
     {"3", day03_main},
 };
 
-int main(int argc, char* argv[]) {
+int main(int argc, char** argv) {
     if (argc != 2) {
         fprintf(stderr, "invalid arguements: must specify an aoc day to run (1-25)\n");
         return 1;

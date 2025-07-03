@@ -1,23 +1,31 @@
 #include "day01.h"
+#include "testing.h"
 #include "utils.h"
 
-#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-int main(void) {
-    assert(day01_part1(file_to_string("./data/example1.txt")) == 0);
-    assert(day01_part1(file_to_string("./data/example2.txt")) == 0);
-    assert(day01_part1(file_to_string("./data/example3.txt")) == 3);
-    assert(day01_part1(file_to_string("./data/example4.txt")) == 3);
-    assert(day01_part1(file_to_string("./data/example5.txt")) == 3);
-    assert(day01_part1(file_to_string("./data/example6.txt")) == -1);
-    assert(day01_part1(file_to_string("./data/example7.txt")) == -1);
-    assert(day01_part1(file_to_string("./data/example8.txt")) == -3);
-    assert(day01_part1(file_to_string("./data/example9.txt")) == -3);
-    assert(day01_part1(file_to_string("./data/input.txt")) == 74);
+const test_entry* day01_tests[] = {
+    TE("./data/example01.txt", "d01_p1_e01", one, 0),
+    TE("./data/example02.txt", "d01_p1_e02", one, 0),
+    TE("./data/example03.txt", "d01_p1_e03", one, 3),
+    TE("./data/example04.txt", "d01_p1_e04", one, 3),
+    TE("./data/example05.txt", "d01_p1_e05", one, 3),
+    TE("./data/example06.txt", "d01_p1_e06", one, -1),
+    TE("./data/example07.txt", "d01_p1_e07", one, -1),
+    TE("./data/example08.txt", "d01_p1_e08", one, -3),
+    TE("./data/example09.txt", "d01_p1_e09", one, -3),
+    TE("./data/input.txt", "d01_p1_i", one, 74),
+    TE("./data/example10.txt", "d01_p2_e10", two, 1),
+    TE("./data/example11.txt", "d01_p2_e11", two, 5),
+    TE("./data/input.txt", "d01_p2_i", two, 1795),
+    nullptr
+};
 
-    assert(day01_part2(file_to_string("./data/example10.txt")) == 1);
-    assert(day01_part2(file_to_string("./data/example11.txt")) == 5);
-    assert(day01_part2(file_to_string("./data/input.txt")) == 1795);
-
-    return 0;
+int day01_test_run(const test_entry* te) {
+    char* input = file_to_string(te->file);
+    int   r     = (te->p == one) ? day01_part1(input) : day01_part2(input);
+    free(input);
+    return r;
 }

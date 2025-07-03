@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 4.0.0)
-SET(CMAKE_C_COMPILER "/opt/homebrew/opt/llvm/bin/clang")
+if(APPLE)
+    set(CMAKE_C_COMPILER "/opt/homebrew/opt/llvm/bin/clang")
+endif()
 project(aoc2015 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 23)
@@ -27,12 +29,22 @@ set(flags
     -DDEBUG -g -O3
 )
 
-add_library(common STATIC src/common/utils.c)
-target_include_directories(common PRIVATE src/common)
-target_compile_options(common PRIVATE ${flags})
+set(utils_dir "src/common/utils")
+add_library(utils OBJECT
+    ${utils_dir}/io.c
+    ${utils_dir}/math.c
+    ${utils_dir}/mem.c
+)
+target_include_directories(utils PUBLIC ${utils_dir})
+target_compile_options(utils PRIVATE ${flags})
 
-set(day_dirs "")
+set(testing_dir "src/common/testing")
+add_library(testing OBJECT ${testing_dir}/testing.c)
+target_include_directories(testing PUBLIC ${testing_dir})
+target_compile_options(testing PRIVATE ${flags})
+
 set(day_targets "")
+set(test_targets "")
 
 foreach(day_num RANGE 1 25)
     if(day_num LESS 10)
@@ -41,32 +53,49 @@ foreach(day_num RANGE 1 25)
         set(day "${day_num}")
     endif()
 
-    set(day_dir "src/day${day}")
     set(day_target "day${day}")
+    set(test_target "${day_target}_test")
+    set(day_dir "src/${day_target}")
     if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${day_dir}")
         continue()
     endif()
+    list(APPEND day_targets ${day_target})
+    list(APPEND test_targets ${test_target})
 
-    add_library(${day_target} STATIC ${day_dir}/day${day}.c)
-    target_include_directories(${day_target} PRIVATE ${day_dir} src/common)
+    add_library(${day_target} OBJECT ${day_dir}/${day_target}.c)
+    target_include_directories(${day_target} PUBLIC ${day_dir})
+    target_link_libraries(${day_target} PRIVATE utils)
     target_compile_options(${day_target} PRIVATE ${flags})
 
-    list(APPEND day_dirs ${day_dir})
-    list(APPEND day_targets ${day_target})
-
-    set(test_target "day${day}_test")
-    add_executable(${test_target} ${day_dir}/day${day}_test.c)
-    target_include_directories(${test_target} PRIVATE ${day_dir} src/common)
-    target_link_libraries(${test_target} PRIVATE ${day_target} common)
-    target_compile_options(${test_target} PRIVATE ${flags})
-
-    add_test(NAME "day${day}" COMMAND ${test_target})
-    set_tests_properties("day${day}" PROPERTIES
-        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${day_dir}"
+    add_library(${test_target} OBJECT ${day_dir}/${test_target}.c)
+    target_link_libraries(${test_target} PUBLIC
+        utils
+        testing
+        ${day_target}
     )
+    target_compile_options(${test_target} PUBLIC ${flags})
+
+    file(READ
+        "${CMAKE_CURRENT_SOURCE_DIR}/${day_dir}/${test_target}.c" file_str)
+    string(REGEX MATCHALL
+        "d[0-9][0-9]_p[0-9]_(e[0-9][0-9]|i)" matches ${file_str})
+    foreach(match ${matches})
+        add_test(NAME ${match}
+            COMMAND test_runner ${day_target} ${match}
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${day_dir}"
+        )
+    endforeach()
 endforeach()
 
+add_executable(test_runner ${testing_dir}/runner.c)
+target_link_libraries(test_runner PRIVATE
+    utils
+    testing
+    ${day_targets}
+    ${test_targets}
+)
+target_compile_options(test_runner PRIVATE ${flags})
+
 add_executable(main main.c)
-target_include_directories(main PRIVATE ${day_dirs})
-target_link_libraries(main common ${day_targets})
+target_link_libraries(main PRIVATE utils ${day_targets})
 target_compile_options(main PRIVATE ${flags})

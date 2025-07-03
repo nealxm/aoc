@@ -16,6 +16,7 @@ Diagnostics:
       - portability-*
       - misc-*
     Remove:
+      - bugprone-easily-swappable-parameters
       - readability-identifier-length
       - readability-magic-numbers
       - readability-isolate-declaration
