@@ -2,10 +2,6 @@
 #include "testing.h"
 #include "utils.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 const test_entry* day02_tests[] = {
     TE("./data/example01.txt", "d02_p1_e01", one, 58),
     TE("./data/example02.txt", "d02_p1_e02", one, 43),

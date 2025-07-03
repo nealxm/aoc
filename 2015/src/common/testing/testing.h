@@ -32,9 +32,12 @@ extern const test_entry*     day02_tests[];
 int                          day02_test_run(const test_entry*);
 extern const test_entry*     day03_tests[];
 int                          day03_test_run(const test_entry*);
+extern const test_entry*     day04_tests[];
+int                          day04_test_run(const test_entry*);
 static const registry_entry* registry[] = {
     RE("day01", day01_tests, day01_test_run),
     RE("day02", day02_tests, day02_test_run),
     RE("day03", day03_tests, day03_test_run),
+    RE("day04", day04_tests, day04_test_run),
     nullptr
 };

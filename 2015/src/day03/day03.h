@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdint.h>
-
 void day03_main(void);
 int  day03_part1(const char*);
 int  day03_part2(const char*);
