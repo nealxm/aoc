@@ -43,6 +43,8 @@ add_library(testing OBJECT ${testing_dir}/testing.c)
 target_include_directories(testing PUBLIC ${testing_dir})
 target_compile_options(testing PRIVATE ${flags})
 
+find_package(OpenSSL REQUIRED)
+
 set(day_targets "")
 set(test_targets "")
 
@@ -64,16 +66,19 @@ foreach(day_num RANGE 1 25)
 
     add_library(${day_target} OBJECT ${day_dir}/${day_target}.c)
     target_include_directories(${day_target} PUBLIC ${day_dir})
+    if(TARGET day04)
+        target_link_libraries(${day_target} PRIVATE OpenSSL::Crypto)
+    endif()
     target_link_libraries(${day_target} PRIVATE utils)
     target_compile_options(${day_target} PRIVATE ${flags})
 
     add_library(${test_target} OBJECT ${day_dir}/${test_target}.c)
-    target_link_libraries(${test_target} PUBLIC
+    target_link_libraries(${test_target} PRIVATE
         utils
         testing
         ${day_target}
     )
-    target_compile_options(${test_target} PUBLIC ${flags})
+    target_compile_options(${test_target} PRIVATE ${flags})
 
     file(READ
         "${CMAKE_CURRENT_SOURCE_DIR}/${day_dir}/${test_target}.c" file_str)
