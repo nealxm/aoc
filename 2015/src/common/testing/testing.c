@@ -20,7 +20,7 @@ uint8_t eval_test(const char* re_name, const char* te_name) {
 const registry_entry* find_re(const char* re_name) {
     const registry_entry* re_curr = nullptr;
 
-    for (const registry_entry* const* re = registry; re != nullptr; ++re) {
+    for (const registry_entry* const* re = registry; *re != nullptr; ++re) {
         if (strcmp(re_name, (*re)->library_name) == 0) {
             re_curr = *re;
             break;
@@ -36,7 +36,7 @@ const registry_entry* find_re(const char* re_name) {
 const test_entry* find_te(const registry_entry* re_curr, const char* te_name) {
     const test_entry* te_curr = nullptr;
 
-    for (const test_entry* const* te = re_curr->tests; te != nullptr; ++te) {
+    for (const test_entry* const* te = re_curr->tests; *te != nullptr; ++te) {
         if (strcmp(te_name, (*te)->name) == 0) {
             te_curr = *te;
             break;
