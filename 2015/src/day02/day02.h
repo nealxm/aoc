@@ -1,5 +1,7 @@
 #pragma once
 
-void day02_main(void);
-int  day02_part1(char**);
-int  day02_part2(char**);
+#include <stdint.h>
+
+void     day02_main(void);
+uint32_t day02_part1(char**);
+uint32_t day02_part2(char**);

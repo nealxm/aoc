@@ -43,8 +43,6 @@ add_library(testing OBJECT ${testing_dir}/testing.c)
 target_include_directories(testing PUBLIC ${testing_dir})
 target_compile_options(testing PRIVATE ${flags})
 
-find_package(OpenSSL REQUIRED)
-
 set(day_targets "")
 set(test_targets "")
 
@@ -67,6 +65,7 @@ foreach(day_num RANGE 1 25)
     add_library(${day_target} OBJECT ${day_dir}/${day_target}.c)
     target_include_directories(${day_target} PUBLIC ${day_dir})
     if(TARGET day04)
+        find_package(OpenSSL REQUIRED)
         target_link_libraries(${day_target} PRIVATE OpenSSL::Crypto)
     endif()
     target_link_libraries(${day_target} PRIVATE utils)

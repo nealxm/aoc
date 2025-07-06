@@ -1,23 +1,26 @@
 #pragma once
 
-void day03_main(void);
-int  day03_part1(const char*);
-int  day03_part2(const char*);
+#include <stdint.h>
+
+void     day03_main(void);
+uint16_t day03_part1(const char*);
+uint16_t day03_part2(const char*);
 
 typedef struct {
-    int x, y;
+    int8_t x, y;
 } pos;
 
 typedef struct {
     const char* dirs;
     pos         curr, curr_r;
+    int32_t     _1;
     pos*        visited;
-    int         visited_len;
-    int         _; //padding
+    uint16_t    visited_len;
+    int8_t      _2[6];
 } state;
 
-state* state_init(const char*);
-void   state_free(state*);
-int    pos_move(pos*, char);
-bool   pos_equal(pos a, pos b);
-int    visited_add(pos**, int*, pos*);
+state*  state_init(const char*);
+void    state_free(state*);
+uint8_t pos_move(pos*, char);
+bool    pos_equal(const pos*, const pos*);
+uint8_t visited_add(pos**, uint16_t*, const pos*);

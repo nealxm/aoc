@@ -2,6 +2,7 @@
 #include "testing.h"
 #include "utils.h"
 
+#include <stdint.h>
 #include <stdlib.h>
 
 const test_entry* day01_tests[] = {
@@ -21,9 +22,9 @@ const test_entry* day01_tests[] = {
     nullptr
 };
 
-int day01_test_run(const test_entry* te) {
-    char* input = file_to_string(te->file);
-    int   r     = (te->p == one) ? day01_part1(input) : day01_part2(input);
+int64_t day01_test_run(const test_entry* te) {
+    char*   input = file_to_string(te->file);
+    int64_t r     = (te->p == one) ? day01_part1(input) : day01_part2(input);
     free(input);
     return r;
 }

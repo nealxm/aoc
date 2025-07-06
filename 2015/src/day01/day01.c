@@ -2,6 +2,7 @@
 
 #include "utils.h"
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,28 +13,28 @@ void day01_main(void) {
     free(input);
 }
 
-int day01_part1(const char* input) {
-    int floor = 0;
-    for (const char* i = input; *i != '\0'; i++) {
+int16_t day01_part1(const char* input) {
+    int16_t floor = 0;
+    for (const char* i = input; *i != '\0'; ++i) {
         if (*i == '(') {
-            floor++;
+            ++floor;
         } else if (*i == ')') {
-            floor--;
+            --floor;
         }
     }
     return floor;
 }
 
-int day01_part2(const char* input) {
-    int floor = 0;
-    for (int i = 0; input[i] != '\0'; i++) {
+int16_t day01_part2(const char* input) {
+    int16_t floor = 0;
+    for (int16_t i = 0; input[i] != '\0'; ++i) {
         if (input[i] == '(') {
-            floor++;
+            ++floor;
         } else if (input[i] == ')') {
-            floor--;
+            --floor;
         }
         if (floor < 0) {
-            return i + 1;
+            return ++i;
         }
     }
     return -1;

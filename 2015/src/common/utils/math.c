@@ -2,14 +2,15 @@
 
 #include <limits.h>
 #include <stdarg.h>
+#include <stdint.h>
 
-int min(int count, ...) {
+int64_t min(uint8_t count, ...) {
     va_list args;
     va_start(args, count);
 
-    int min = INT_MAX;
-    for (int i = 0; i < count; ++i) {
-        int val = va_arg(args, int);
+    int64_t min = INT64_MAX;
+    for (uint8_t i = 0; i < count; ++i) {
+        int64_t val = va_arg(args, int64_t);
         if (val < min) {
             min = val;
         }
@@ -18,13 +19,13 @@ int min(int count, ...) {
     return min;
 }
 
-int max(int count, ...) {
+int64_t max(uint8_t count, ...) {
     va_list args;
     va_start(args, count);
 
-    int max = INT_MIN;
-    for (int i = 0; i < count; ++i) {
-        int val = va_arg(args, int);
+    int64_t max = INT64_MIN;
+    for (uint8_t i = 0; i < count; ++i) {
+        int64_t val = va_arg(args, int64_t);
         if (val > max) {
             max = val;
         }

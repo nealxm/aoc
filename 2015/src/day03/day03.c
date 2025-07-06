@@ -2,6 +2,7 @@
 
 #include "utils.h"
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,9 +13,9 @@ void day03_main(void) {
     free(input);
 }
 
-int day03_part1(const char* input) {
-    state* s = state_init(input);
-    int    r = -1;
+uint16_t day03_part1(const char* input) {
+    state*   s = state_init(input);
+    uint16_t r = 0;
 
     for (const char* d = s->dirs; *d != '\0'; ++d) {
         if (pos_move(&s->curr, *d) != 0
@@ -26,17 +27,17 @@ int day03_part1(const char* input) {
 
 cleanup:
     state_free(s);
-    if (r == -1) {
+    if (r == 0) {
         exit(1);
     }
     return r;
 }
 
-int day03_part2(const char* input) {
-    state* s = state_init(input);
-    int    r = -1;
+uint16_t day03_part2(const char* input) {
+    state*   s = state_init(input);
+    uint16_t r = 0;
 
-    for (int i = 0; s->dirs[i] != '\0'; ++i) {
+    for (uint16_t i = 0; s->dirs[i] != '\0'; ++i) {
         pos* curr_adj = (i % 2 == 0) ? &s->curr : &s->curr_r;
 
         if (pos_move(curr_adj, s->dirs[i]) != 0
@@ -48,7 +49,7 @@ int day03_part2(const char* input) {
 
 cleanup:
     state_free(s);
-    if (r == -1) {
+    if (r == 0) {
         exit(1);
     }
     return r;
@@ -73,7 +74,7 @@ void state_free(state* s) {
     free(s);
 }
 
-int pos_move(pos* p, char d) {
+uint8_t pos_move(pos* p, char d) {
     switch (d) {
     case '^': ++p->y; break;
     case '>': ++p->x; break;
@@ -84,13 +85,13 @@ int pos_move(pos* p, char d) {
     return 0;
 }
 
-bool pos_equal(pos a, pos b) {
-    return (bool)(a.x == b.x && a.y == b.y);
+bool pos_equal(const pos* a, const pos* b) {
+    return (bool)(a->x == b->x && a->y == b->y);
 }
 
-int visited_add(pos** v, int* l, pos* n) {
-    for (int i = 0; i < *l; ++i) {
-        if (pos_equal((*v)[i], *n)) {
+uint8_t visited_add(pos** v, uint16_t* l, const pos* n) {
+    for (uint16_t i = 0; i < *l; ++i) {
+        if (pos_equal(&(*v)[i], n)) {
             return 0;
         }
     }
