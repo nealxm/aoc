@@ -9,7 +9,12 @@ const test_entry* day05_tests[] = {
     TE("./data/example02.txt", "d05_p1_e02", one, 0),
     TE("./data/example03.txt", "d05_p1_e03", one, 0),
     TE("./data/example04.txt", "d05_p1_e04", one, 0),
-    TE("./data/input.txt", "d05_p1_i", one, 258)
+    TE("./data/input.txt", "d05_p1_i", one, 258),
+    TE("./data/example05.txt", "d05_p2_e05", two, 1),
+    TE("./data/example06.txt", "d05_p2_e06", two, 1),
+    TE("./data/example07.txt", "d05_p2_e07", two, 0),
+    TE("./data/example08.txt", "d05_p2_e08", two, 0),
+    TE("./data/input.txt", "d05_p2_i", two, 53)
 };
 
 int64_t day05_test_run(const test_entry* te) {

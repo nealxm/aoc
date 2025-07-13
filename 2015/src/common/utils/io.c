@@ -61,6 +61,10 @@ char** file_to_array(const char* file) {
         }
         lines = lines_new;
 
+        char* newline = strchr(line, '\n');
+        if (newline) {
+            *newline = '\0';
+        }
         lines[lines_len]   = strdup(line);
         lines[++lines_len] = nullptr;
     }
