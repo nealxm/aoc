@@ -3,13 +3,14 @@
 #include "day03.h"
 #include "day04.h"
 #include "day05.h"
+#include "day06.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
 typedef struct {
     const char* day;
-    void        (*func)(void);
+    void (*func)(void);
 } day;
 
 static day days[25] = {
@@ -18,6 +19,7 @@ static day days[25] = {
     {"3", day03_main},
     {"4", day04_main},
     {"5", day05_main},
+    {"6", day06_main},
 };
 
 int main(int argc, char** argv) {

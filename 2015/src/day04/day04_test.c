@@ -14,8 +14,8 @@ const test_entry* day04_tests[] = {
 };
 
 int64_t day04_test_run(const test_entry* te) {
-    char*   input = file_to_string(te->file);
-    int64_t r     = (te->p == one) ? day04_part1(input) : day04_part2(input);
+    char* input = file_to_string(te->file);
+    int64_t r = (te->p == one) ? day04_part1(input) : day04_part2(input);
     free(input);
     return r;
 }

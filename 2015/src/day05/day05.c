@@ -15,8 +15,8 @@ void day05_main(void) {
 }
 
 uint16_t day05_part1(char** input) {
-    uint16_t nice       = 0;
-    char*    invalids[] = {"ab", "cd", "pq", "xy", nullptr};
+    uint16_t nice = 0;
+    char* invalids[] = {"ab", "cd", "pq", "xy", nullptr};
 
     for (char** i = input; *i; ++i) {
         for (char** n = invalids; *n; ++n) {
@@ -24,8 +24,8 @@ uint16_t day05_part1(char** input) {
                 goto outer;
             }
         }
-        uint8_t vowels   = 0;
-        bool    repeated = false;
+        uint8_t vowels = 0;
+        bool repeated = false;
 
         for (char* j = *i; *j != '\0'; ++j) {
             if (vowels < 3 && strchr("aeiou", *j)) {
@@ -39,7 +39,7 @@ uint16_t day05_part1(char** input) {
                 break;
             }
         }
-outer:
+    outer:
     }
     return nice;
 }
@@ -59,8 +59,8 @@ uint16_t day05_part2(char** input) {
         memset(pair_pos, -1, sizeof(pair_pos));
 
         for (char* j = *i; *(j + 1) != '\0'; ++j) {
-            int8_t    fst  = *j - 'a';
-            int8_t    snd  = *(j + 1) - 'a';
+            int8_t fst = *j - 'a';
+            int8_t snd = *(j + 1) - 'a';
             ptrdiff_t curr = j - *i;
 
             if (pair_pos[fst][snd] == -1) {

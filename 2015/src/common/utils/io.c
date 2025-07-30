@@ -15,13 +15,13 @@ char* file_to_string(const char* file) {
         fclose(f);
         return nullptr;
     }
-    long file_size = ftell(f);
+    const long file_size = ftell(f);
     if (file_size < 0) {
         fprintf(stderr, "could not determine size of '%s'\n", file);
         fclose(f);
         return nullptr;
     }
-    size_t f_size = (size_t)file_size;
+    const size_t f_size = (size_t)file_size;
     if (fseek(f, 0, SEEK_SET) != 0) {
         fprintf(stderr, "could not reset position of '%s'\n", file);
         fclose(f);
@@ -33,12 +33,11 @@ char* file_to_string(const char* file) {
         fclose(f);
         return nullptr;
     }
-    size_t elements  = fread(string, 1, f_size, f);
+    size_t elements = fread(string, 1, f_size, f);
     string[elements] = '\0';
     fclose(f);
     return string;
 }
-
 
 char** file_to_array(const char* file) {
     FILE* f = fopen(file, "r");
@@ -46,10 +45,10 @@ char** file_to_array(const char* file) {
         fprintf(stderr, "could not open '%s'\n", file);
         return nullptr;
     }
-    char** lines     = nullptr;
+    char** lines = nullptr;
     size_t lines_len = 0;
-    char*  line      = nullptr;
-    size_t line_len  = 0;
+    char* line = nullptr;
+    size_t line_len = 0;
 
     while (getline(&line, &line_len, f) != -1) {
         char** lines_new = (char**)realloc((void*)lines, sizeof(char*) * (lines_len + 2));
@@ -61,11 +60,11 @@ char** file_to_array(const char* file) {
         }
         lines = lines_new;
 
-        char* newline = strchr(line, '\n');
+        char* const newline = strchr(line, '\n');
         if (newline) {
             *newline = '\0';
         }
-        lines[lines_len]   = strdup(line);
+        lines[lines_len] = strdup(line);
         lines[++lines_len] = nullptr;
     }
     free(line);

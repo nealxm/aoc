@@ -1,108 +1,14 @@
----
-Language: Cpp
 BasedOnStyle: LLVM
-Standard: Auto
+Language: Cpp
+Standard: Latest
 
+IndentWidth: 4
+ColumnLimit: 120
+InsertNewlineAtEOF: true
+IncludeBlocks: Regroup
+SortIncludes: true
+PointerAlignment: Left
 AlignAfterOpenBracket: BlockIndent
-AlignArrayOfStructures: Left
-AlignConsecutiveAssignments:
-  Enabled: true
-  AcrossEmptyLines: false
-  AcrossComments: false
-  AlignCompound: true
-  PadOperators: true
-AlignConsecutiveBitFields: Consecutive
-AlignConsecutiveDeclarations:
-  Enabled: true
-  AcrossEmptyLines: false
-  AcrossComments: false
-  AlignFunctionDeclarations: true
-  AlignFunctionPointers: true
-AlignConsecutiveMacros: Consecutive
-AlignConsecutiveShortCaseStatements:
-  Enabled: true
-  AcrossEmptyLines: false
-  AcrossComments: false
-  AlignCaseArrows: true
-  AlignCaseColons: true
-AlignEscapedNewlines: DontAlign
-# AlignOperands: BreakBeforeBinaryOperators
-AlignTrailingComments:
-  Kind: Always
-  OverEmptyLines: 0
-
-AllowAllArgumentsOnNextLine: true
-AllowAllParametersOfDeclarationOnNextLine: true
-AllowShortBlocksOnASingleLine: false
-AllowShortCaseExpressionOnASingleLine: true
-AllowShortCaseLabelsOnASingleLine: true
+BinPackArguments: false
 AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: false
-
-AlwaysBreakBeforeMultilineStrings: true
-BinPackArguments: false
-BinPackParameters: true
-BitFieldColonSpacing: Both
-
-BreakAdjacentStringLiterals: false
-BreakArrays: false
-BreakBeforeBinaryOperators: NonAssignment
-BreakBeforeBraces: Attach
-BreakBeforeTernaryOperators: true
-BreakBinaryOperations: RespectPrecedence
-BreakFunctionDefinitionParameters: false
-BreakStringLiterals: true
-
-ColumnLimit: 100
-# EnumTrailingComma: Remove
-IncludeBlocks: Regroup
-
-IndentCaseBlocks: false
-IndentCaseLabels: false
-IndentGotoLabels: false
-IndentPPDirectives: AfterHash
-IndentWidth: 4
-IndentWrappedFunctionNames: true
-
-InsertNewlineAtEOF: true
-KeepEmptyLines:
-  AtEndOfFile: false
-  AtStartOfBlock: false
-  AtStartOfFile: false
-KeepFormFeed: false
-LineEnding: LF
-MainIncludeChar: Quote
-MaxEmptyLinesToKeep: 2
-PPIndentWidth: -1
-
-PointerAlignment: Left
-QualifierAlignment: Leave
-ReferenceAlignment: Right
-ReflowComments: true
-RemoveBracesLLVM: false
-RemoveEmptyLinesInUnwrappedLines: true
-RemoveParentheses: ReturnStatement
-RemoveSemicolon: true
-SkipMacroDefinitionBody: true
-SortIncludes: true
-
-SpaceAfterCStyleCast: false
-SpaceAfterLogicalNot: false
-SpaceAroundPointerQualifiers: Default
-SpaceBeforeAssignmentOperators: true
-SpaceBeforeCaseColon: false
-SpaceBeforeParens: ControlStatements
-SpaceBeforeSquareBrackets: false
-SpaceInEmptyBlock: false
-SpacesBeforeTrailingComments: 1
-SpacesInContainerLiterals: false
-SpacesInLineCommentPrefix:
-  Minimum: 0
-  Maximum: 0
-SpacesInParens: Never
-SpacesInSquareBrackets: false
-
-TabWidth: 4
-UseTab: Never

@@ -2,7 +2,7 @@
 
 #include "utils.h"
 
-//#include "CommonCrypto/CommonDigest.h"
+// #include "CommonCrypto/CommonDigest.h"
 #include <openssl/md5.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -16,26 +16,19 @@ void day04_main(void) {
     printf("2015:d04p2 - %u\n", day04_part2(input));
     free(input);
 }
+typedef bool (*zero_checker)(const unsigned char*);
 
-uint32_t day04_part1(char* input) {
-    return find_md5_suffix(input, check_5_zeros);
+static bool check_5_zeros(const unsigned char* md5) {
+    return md5[0] == 0 && md5[1] == 0 && md5[2] < 0x10;
 }
 
-uint32_t day04_part2(char* input) {
-    return find_md5_suffix(input, check_6_zeros);
+static bool check_6_zeros(const unsigned char* md5) {
+    return md5[0] == 0 && md5[1] == 0 && md5[2] == 0;
 }
 
-bool check_5_zeros(const unsigned char* md5) {
-    return (bool)(md5[0] == 0 && md5[1] == 0 && md5[2] < 0x10);
-}
-
-bool check_6_zeros(const unsigned char* md5) {
-    return (bool)(md5[0] == 0 && md5[1] == 0 && md5[2] == 0);
-}
-
-uint32_t find_md5_suffix(char* input, zero_checker check_zeros) {
-    uint64_t      base_len = strlen(input);
-    char          curr[64];
+static uint32_t find_md5_suffix(char* input, zero_checker check_zeros) {
+    uint64_t base_len = strlen(input);
+    char curr[64];
     unsigned char md5[MD5_DIGEST_LENGTH];
     strcpy(curr, input);
 
@@ -57,4 +50,12 @@ uint32_t find_md5_suffix(char* input, zero_checker check_zeros) {
             return suf;
         }
     }
+}
+
+uint32_t day04_part1(char* input) {
+    return find_md5_suffix(input, check_5_zeros);
+}
+
+uint32_t day04_part2(char* input) {
+    return find_md5_suffix(input, check_6_zeros);
 }

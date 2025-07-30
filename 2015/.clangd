@@ -17,9 +17,11 @@ Diagnostics:
       - misc-*
     Remove:
       - bugprone-easily-swappable-parameters
+      - bugprone-narrowing-conversions
       - readability-identifier-length
       - readability-magic-numbers
       - readability-isolate-declaration
+      - readability-implicit-bool-conversion
     FastCheckFilter: None
 
   UnusedIncludes: Strict

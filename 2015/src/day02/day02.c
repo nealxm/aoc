@@ -21,10 +21,10 @@ uint32_t day02_part1(char** input) {
             fprintf(stderr, "failed to parse line '%s'\n", *i);
             exit(1);
         }
-        uint16_t s1  = l * w;
-        uint16_t s2  = w * h;
-        uint16_t s3  = h * l;
-        total       += (2 * (s1 + s2 + s3)) + (uint32_t)min(3, s1, s2, s3);
+        uint16_t s1 = l * w;
+        uint16_t s2 = w * h;
+        uint16_t s3 = h * l;
+        total += (2 * (s1 + s2 + s3)) + (uint32_t)min(3, s1, s2, s3);
     }
     return total;
 }

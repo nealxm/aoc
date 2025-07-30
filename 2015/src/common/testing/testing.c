@@ -7,7 +7,7 @@
 
 uint8_t eval_test(const char* re_name, const char* te_name) {
     const registry_entry* re_curr = find_re(re_name);
-    const test_entry*     te_curr = find_te(re_curr, te_name);
+    const test_entry* te_curr = find_te(re_curr, te_name);
 
     int64_t r = re_curr->test_run(te_curr);
     if (r != te_curr->expected) {

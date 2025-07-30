@@ -4,7 +4,7 @@
 
 char* file_to_string(const char*);
 
-void   free_array(void**);
+void free_array(void**);
 char** file_to_array(const char*);
 
 int64_t min(uint8_t, ...);

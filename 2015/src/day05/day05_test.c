@@ -14,12 +14,13 @@ const test_entry* day05_tests[] = {
     TE("./data/example06.txt", "d05_p2_e06", two, 1),
     TE("./data/example07.txt", "d05_p2_e07", two, 0),
     TE("./data/example08.txt", "d05_p2_e08", two, 0),
-    TE("./data/input.txt", "d05_p2_i", two, 53)
+    TE("./data/input.txt", "d05_p2_i", two, 53),
+    nullptr
 };
 
 int64_t day05_test_run(const test_entry* te) {
-    char**  input = file_to_array(te->file);
-    int64_t r     = (te->p == one) ? day05_part1(input) : day05_part2(input);
+    char** input = file_to_array(te->file);
+    int64_t r = (te->p == one) ? day05_part1(input) : day05_part2(input);
     free_array((void**)input);
     return r;
 }
