@@ -26,6 +26,7 @@ set(flags
     -Wno-declaration-after-statement
     -Wno-poison-system-directories
     -Wno-unsafe-buffer-usage
+    -Wno-covered-switch-default
     -DDEBUG -g -O3
 )
 

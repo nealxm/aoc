@@ -6,7 +6,9 @@
 
 const test_entry* day06_tests[] = {
     TE("./data/example01.txt", "d06_p1_e01", one, 998996),
-    // TE("./data/input.txt", "d06_p1_i", one, ),
+    TE("./data/input.txt", "d06_p1_i", one, 569999),
+    TE("./data/example02.txt", "d06_p2_e02", two, 2000001),
+    TE("./data/input.txt", "d06_p2_i", two, 17836115),
     nullptr
 };
 
