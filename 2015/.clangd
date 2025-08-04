@@ -22,6 +22,7 @@ Diagnostics:
       - readability-magic-numbers
       - readability-isolate-declaration
       - readability-implicit-bool-conversion
+      - misc-no-recursion
     FastCheckFilter: None
 
   UnusedIncludes: Strict

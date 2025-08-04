@@ -26,8 +26,9 @@ set(flags
     -Wno-declaration-after-statement
     -Wno-poison-system-directories
     -Wno-unsafe-buffer-usage
+    -Wno-padded
     -Wno-covered-switch-default
-    -DDEBUG -g -O3
+    -g3 -O3
 )
 
 set(utils_dir "src/common/utils")

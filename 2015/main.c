@@ -4,6 +4,7 @@
 #include "day04.h"
 #include "day05.h"
 #include "day06.h"
+#include "day07.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +21,7 @@ static day days[25] = {
     {"4", day04_main},
     {"5", day05_main},
     {"6", day06_main},
+    {"7", day07_main},
 };
 
 int main(int argc, char** argv) {

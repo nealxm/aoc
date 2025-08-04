@@ -20,10 +20,8 @@ typedef struct {
 typedef struct {
     const char* dirs;
     pos curr, curr_r;
-    int32_t _1;
     pos* visited;
     uint16_t visited_len;
-    int8_t _2[6];
 } state;
 
 static void state_free(state* s) {
