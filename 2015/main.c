@@ -29,7 +29,7 @@ static day days[25] = {
     {"8", day08_main},
     {"9", day09_main},
     {"10", day10_main},
-    {"11", day10_main},
+    {"11", day11_main},
 };
 
 int main(int argc, char** argv) {
