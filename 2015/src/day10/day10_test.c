@@ -1,4 +1,3 @@
-
 #include "day10.h"
 #include "testing.h"
 #include "utils.h"

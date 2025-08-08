@@ -8,8 +8,8 @@
 
 void day03_main(void) {
     char* input = file_to_string("./src/day03/data/input.txt");
-    printf("2015:d03p1 - %d\n", day03_part1(input));
-    printf("2015:d03p2 - %d\n", day03_part2(input));
+    printf("2015:d03p1 - %hu\n", day03_part1(input));
+    printf("2015:d03p2 - %hu\n", day03_part2(input));
     free(input);
 }
 

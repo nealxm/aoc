@@ -9,8 +9,8 @@
 
 void day07_main(void) {
     char** input = file_to_array("./src/day07/data/input.txt");
-    printf("2015:d07p1 - %u\n", day07_part1(input));
-    printf("2015:d07p2 - %u\n", day07_part2(input));
+    printf("2015:d07p1 - %hu\n", day07_part1(input));
+    printf("2015:d07p2 - %hu\n", day07_part2(input));
     free_array((void**)input);
 }
 
