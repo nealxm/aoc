@@ -56,6 +56,8 @@ extern const test_entry* day10_tests[];
 int64_t day10_test_run(const test_entry*);
 extern const test_entry* day11_tests[];
 int64_t day11_test_run(const test_entry*);
+extern const test_entry* day12_tests[];
+int64_t day12_test_run(const test_entry*);
 static const registry_entry* registry[] = {
     RE("day01", day01_tests, day01_test_run),
     RE("day02", day02_tests, day02_test_run),
@@ -68,5 +70,6 @@ static const registry_entry* registry[] = {
     RE("day09", day09_tests, day09_test_run),
     RE("day10", day10_tests, day10_test_run),
     RE("day11", day11_tests, day11_test_run),
+    RE("day12", day12_tests, day12_test_run),
     nullptr
 };

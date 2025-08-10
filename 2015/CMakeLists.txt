@@ -11,14 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(CTest)
 enable_testing()
-
-include(ProcessorCount)
-ProcessorCount(N)
-set(CMAKE_BUILD_PARALLEL_LEVEL ${N})
-set(CTEST_PARALLEL_LEVEL ${N})
-set_property(GLOBAL PROPERTY JOB_POOLS default=${N})
-set(CMAKE_JOB_POOL_COMPILE default)
-set(CMAKE_JOB_POOL_LINK default)
+find_package(OpenSSL REQUIRED)
 
 set(flags
     -Wall -Wextra -Wpedantic -Weverything
@@ -66,10 +59,11 @@ foreach(day_num RANGE 1 25)
 
     add_library(${day_target} OBJECT ${day_dir}/${day_target}.c)
     target_include_directories(${day_target} PUBLIC ${day_dir})
+
     if(TARGET day04)
-        find_package(OpenSSL REQUIRED)
         target_link_libraries(${day_target} PRIVATE OpenSSL::Crypto)
     endif()
+
     target_link_libraries(${day_target} PRIVATE utils)
     target_compile_options(${day_target} PRIVATE ${flags})
 
