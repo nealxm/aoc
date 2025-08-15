@@ -2,10 +2,10 @@
 
 #include "utils.h"
 
-#include <_string.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void day11_main(void) {
     char* input = file_to_string("./src/day11/data/input.txt");
