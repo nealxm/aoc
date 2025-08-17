@@ -53,7 +53,7 @@ char** file_to_array(const char* file) {
     while (getline(&line, &line_len, f) != -1) {
         char** lines_new = (char**)realloc((void*)lines, sizeof(char*) * (lines_len + 2));
         if (!lines_new) {
-            fprintf(stderr, "could not reallocate memory for next line '%s'", line);
+            fprintf(stderr, "could not reallocate memory for next line '%s'\n", line);
             free(line);
             free_array((void**)lines);
             return nullptr;

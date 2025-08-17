@@ -43,7 +43,7 @@ int32_t day12_part2(const char* input) {
 
     obj_state* obj_stack = malloc(cap * sizeof(obj_state));
     if (!obj_stack) {
-        fprintf(stderr, "failed to allocate obj_stack");
+        fprintf(stderr, "failed to allocate obj_stack\n");
         exit(1);
     }
     while (*csr) {
@@ -54,7 +54,7 @@ int32_t day12_part2(const char* input) {
                 obj_state* new = realloc(obj_stack, (++cap) + sizeof(obj_state));
                 if (!new) {
                     free(obj_stack);
-                    fprintf(stderr, "failed to reallocate obj_stack");
+                    fprintf(stderr, "failed to reallocate obj_stack\n");
                     exit(1);
                 }
                 obj_stack = new;

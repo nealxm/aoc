@@ -176,7 +176,7 @@ int16_t day13_part1(char** input) {
     state* s = state_init(input);
     uint8_t* order = calloc(s->num_ppl, sizeof(uint8_t));
     if (!order) {
-        fprintf(stderr, "failed to allocate memory for order");
+        fprintf(stderr, "failed to allocate memory for order\n");
         state_free(s);
         exit(1);
     }
@@ -200,7 +200,7 @@ int16_t day13_part2(char** input) {
 
     uint8_t* order = calloc(s->num_ppl, sizeof(uint8_t));
     if (!order) {
-        fprintf(stderr, "failed to allocate memory for order");
+        fprintf(stderr, "failed to allocate memory for order\n");
         state_free(s);
         exit(1);
     }

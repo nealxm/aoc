@@ -20,7 +20,7 @@ int64_t day10_test_run(const test_entry* te) {
     free(input);
 
     if (r > INT64_MAX) {
-        fprintf(stderr, "result too large: %llu", r);
+        fprintf(stderr, "result too large: %llu\n", r);
         exit(1);
     }
     return (int64_t)r;
