@@ -16,7 +16,7 @@ const test_entry* day02_tests[] = {
 
 int64_t day02_test_run(const test_entry* te) {
     char** input = file_to_array(te->file);
-    int64_t r = (te->p == one) ? day02_part1(input) : day02_part2(input);
+    int64_t r = (te->p == one) ? day02_part1((const char* const*)input) : day02_part2((const char* const*)input);
     free_array((void**)input);
     return r;
 }

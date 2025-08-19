@@ -2,7 +2,6 @@
 
 #include "utils.h"
 
-#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,8 +9,8 @@
 
 void day13_main(void) {
     char** input = file_to_array("./src/day13/data/input.txt");
-    printf("2015:d13p1 - %hd\n", day13_part1(input));
-    printf("2015:d13p2 - %hd\n", day13_part2(input));
+    printf("2015:d13p1 - %hd\n", day13_part1((const char* const*)input));
+    printf("2015:d13p2 - %hd\n", day13_part2((const char* const*)input));
     free_array((void**)input);
 }
 
@@ -49,9 +48,9 @@ static void state_free(state* s) {
     free(s);
 }
 
-static state* state_init(char** input) {
+static state* state_init(const char* const* input) {
     uint8_t lines = 0;
-    for (char** l = input; *l; ++l) {
+    for (const char* const* l = input; *l; ++l) {
         ++lines;
     }
     state* s = malloc(sizeof(state));
@@ -70,29 +69,31 @@ static state* state_init(char** input) {
         exit(1);
     }
 
-    for (char** l = input; *l; ++l) {
+    for (const char* const* l = input; *l; ++l) {
         rule* new_rule = malloc(sizeof(rule));
         if (!new_rule) {
             fprintf(stderr, "failed to allocate memory for rule\n");
             state_free(s);
             exit(1);
         }
-        ptrdiff_t i = l - input;
         char subj_tmp[16], neig_tmp[16];
         uint8_t mod_tmp;
 
-        if (sscanf(*l, "%s would gain %hhu happiness units by sitting next to %[^.].", subj_tmp, &mod_tmp, neig_tmp) ==
-            3) {
+        if (
+            sscanf(*l, "%s would gain %hhu happiness units by sitting next to %[^.].", //
+                   subj_tmp, &mod_tmp, neig_tmp) == 3
+        ) {
             new_rule->kind = gain;
-        } else if (sscanf(
-                       *l, "%s would lose %hhu happiness units by sitting next to %[^.].", subj_tmp, &mod_tmp, neig_tmp
-                   ) == 3) {
+        } else if (
+            sscanf(*l, "%s would lose %hhu happiness units by sitting next to %[^.].", //
+                   subj_tmp, &mod_tmp, neig_tmp) == 3
+        ) {
             new_rule->kind = lose;
         }
         new_rule->subj = strdup(subj_tmp);
         new_rule->neig = strdup(neig_tmp);
         new_rule->mod = mod_tmp;
-        s->rules[i] = new_rule;
+        s->rules[l - input] = new_rule;
 
         bool subj_found = false, neig_found = false;
         for (uint8_t j = 0; j < s->num_ppl; ++j) {
@@ -161,7 +162,7 @@ static int16_t find_max_happ(state* s, uint8_t* curr_order, uint8_t curr_size) {
     for (uint8_t i = 0; i < s->num_ppl; ++i) {
         for (uint8_t j = 0; j < curr_size; ++j) {
             if (curr_order[j] == i) {
-                goto outer; // i is potential next; skip if it appears anywhere in curr order
+                goto outer; //i is potential next; skip if it appears anywhere in curr order
             }
         }
         curr_order[curr_size] = i;
@@ -172,7 +173,7 @@ static int16_t find_max_happ(state* s, uint8_t* curr_order, uint8_t curr_size) {
     return max;
 }
 
-int16_t day13_part1(char** input) {
+int16_t day13_part1(const char* const* input) {
     state* s = state_init(input);
     uint8_t* order = calloc(s->num_ppl, sizeof(uint8_t));
     if (!order) {
@@ -186,7 +187,7 @@ int16_t day13_part1(char** input) {
     return out;
 }
 
-int16_t day13_part2(char** input) {
+int16_t day13_part2(const char* const* input) {
     state* s = state_init(input);
     char** tmp = (char**)realloc((void*)s->people, (s->num_ppl + 2) * sizeof(char*));
     if (!tmp) {

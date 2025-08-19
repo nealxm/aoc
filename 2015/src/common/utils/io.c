@@ -27,13 +27,13 @@ char* file_to_string(const char* file) {
         fclose(f);
         return nullptr;
     }
-    char* string = malloc(f_size + 1);
+    char* const string = malloc(f_size + 1);
     if (!string) {
         fprintf(stderr, "could not allocate memory for '%s'\n", file);
         fclose(f);
         return nullptr;
     }
-    size_t elements = fread(string, 1, f_size, f);
+    const size_t elements = fread(string, 1, f_size, f);
     string[elements] = '\0';
     fclose(f);
     return string;

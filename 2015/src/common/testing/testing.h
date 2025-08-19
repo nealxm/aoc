@@ -2,13 +2,13 @@
 
 #include <stdint.h>
 
-#define TE(f, n, p, e)                                                                                                 \
-    &(test_entry) {                                                                                                    \
-        f, n, p, e                                                                                                     \
+#define TE(f, n, p, e) \
+    &(test_entry) {    \
+        f, n, p, e     \
     }
-#define RE(l, t, r)                                                                                                    \
-    &(registry_entry) {                                                                                                \
-        l, t, r                                                                                                        \
+#define RE(l, t, r)     \
+    &(registry_entry) { \
+        l, t, r         \
     }
 
 typedef enum {

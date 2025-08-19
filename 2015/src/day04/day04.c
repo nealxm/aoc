@@ -2,7 +2,7 @@
 
 #include "utils.h"
 
-// #include "CommonCrypto/CommonDigest.h"
+//#include "CommonCrypto/CommonDigest.h"
 #include <openssl/md5.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -26,7 +26,7 @@ static bool check_6_zeros(const unsigned char* md5) {
     return md5[0] == 0 && md5[1] == 0 && md5[2] == 0;
 }
 
-static uint32_t find_md5_suffix(char* input, zero_checker check_zeros) {
+static uint32_t find_md5_suffix(const char* input, zero_checker check_zeros) {
     uint64_t base_len = strlen(input);
     char curr[64];
     unsigned char md5[MD5_DIGEST_LENGTH];
@@ -52,10 +52,10 @@ static uint32_t find_md5_suffix(char* input, zero_checker check_zeros) {
     }
 }
 
-uint32_t day04_part1(char* input) {
+uint32_t day04_part1(const char* input) {
     return find_md5_suffix(input, check_5_zeros);
 }
 
-uint32_t day04_part2(char* input) {
+uint32_t day04_part2(const char* input) {
     return find_md5_suffix(input, check_6_zeros);
 }

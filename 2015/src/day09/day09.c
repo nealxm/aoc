@@ -9,8 +9,8 @@
 
 void day09_main(void) {
     char** input = file_to_array("./src/day09/data/input.txt");
-    printf("2015:d09p1 - %hu\n", day09_part1(input));
-    printf("2015:d09p2 - %hu\n", day09_part2(input));
+    printf("2015:d09p1 - %hu\n", day09_part1((const char* const*)input));
+    printf("2015:d09p2 - %hu\n", day09_part2((const char* const*)input));
     free_array((void**)input);
 }
 
@@ -43,9 +43,9 @@ static void state_free(state* s) {
     free(s);
 }
 
-static state* state_init(char** input) {
+static state* state_init(const char* const* input) {
     uint8_t lines = 0;
-    for (char** l = input; *l; ++l) {
+    for (const char* const* l = input; *l; ++l) {
         ++lines;
     }
     state* s = calloc(1, sizeof(state));
@@ -67,17 +67,16 @@ static state* state_init(char** input) {
         exit(1);
     }
 
-    for (uint8_t i = 0; i < lines; ++i) {
-        char* line = input[i];
+    for (const char* const* l = input; *l; ++l) {
         char org_tmp[16], dst_tmp[16];
         uint16_t dist_tmp;
-        sscanf(line, "%s to %s = %hu", org_tmp, dst_tmp, &dist_tmp);
+        sscanf(*l, "%s to %s = %hu", org_tmp, dst_tmp, &dist_tmp);
 
         route* r = malloc(sizeof(route));
         r->org = strdup(org_tmp);
         r->dst = strdup(dst_tmp);
         r->dist = dist_tmp;
-        s->routes[i] = r;
+        s->routes[l - input] = r;
 
         bool org_found = false, dst_found = false;
         for (uint8_t j = 0; j < s->num_cities; ++j) {
@@ -162,7 +161,7 @@ static uint16_t find_best_route(state* s, bool longest, uint16_t curr_dist, uint
     return best_dist;
 }
 
-uint16_t day09_part1(char** input) {
+uint16_t day09_part1(const char* const* input) {
     state* s = state_init(input);
     uint8_t* curr_route = calloc(s->num_cities, sizeof(uint8_t));
     if (!curr_route) {
@@ -176,7 +175,7 @@ uint16_t day09_part1(char** input) {
     return out;
 }
 
-uint16_t day09_part2(char** input) {
+uint16_t day09_part2(const char* const* input) {
     state* s = state_init(input);
     uint8_t* curr_route = calloc(s->num_cities, sizeof(uint8_t));
     if (!curr_route) {

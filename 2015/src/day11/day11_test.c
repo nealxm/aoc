@@ -2,9 +2,7 @@
 #include "testing.h"
 #include "utils.h"
 
-#include <assert.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 static int64_t str_to_b26(const char* str) {
@@ -24,10 +22,10 @@ const test_entry* day11_tests[] = {
 };
 
 int64_t day11_test_run(const test_entry* te) {
-    // assert(str_to_b26("abcdffaa") == day11_tests[0]->expected);
-    // assert(str_to_b26("ghjaabcc") == day11_tests[1]->expected);
-    // assert(str_to_b26("cqjxxyzz") == day11_tests[2]->expected);
-    // assert(str_to_b26("cqkaabcc") == day11_tests[3]->expected);
+    //assert(str_to_b26("abcdffaa") == day11_tests[0]->expected);
+    //assert(str_to_b26("ghjaabcc") == day11_tests[1]->expected);
+    //assert(str_to_b26("cqjxxyzz") == day11_tests[2]->expected);
+    //assert(str_to_b26("cqkaabcc") == day11_tests[3]->expected);
 
     char* input = file_to_string(te->file);
     char* r = (te->p == one) ? day11_part1(input) : day11_part2(input);

@@ -9,20 +9,21 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(CMAKE_CONFIGURATION_TYPES Release;Debug)
+set(CMAKE_DEFAULT_BUILD_TYPE Release)
+set(CMAKE_C_FLAGS "-Wall -Wextra -Wpedantic -Weverything \
+-Wno-pre-c23-compat \
+-Wno-declaration-after-statement \
+-Wno-poison-system-directories \
+-Wno-unsafe-buffer-usage \
+-Wno-padded \
+-Wno-covered-switch-default")
+set(CMAKE_C_FLAGS_RELEASE "-O3")
+set(CMAKE_C_FLAGS_DEBUG "-O0 -g3")
+
 include(CTest)
 enable_testing()
 find_package(OpenSSL REQUIRED)
-
-set(flags
-    -Wall -Wextra -Wpedantic -Weverything
-    -Wno-pre-c23-compat
-    -Wno-declaration-after-statement
-    -Wno-poison-system-directories
-    -Wno-unsafe-buffer-usage
-    -Wno-padded
-    -Wno-covered-switch-default
-    -g3 -O3
-)
 
 set(utils_dir "src/common/utils")
 add_library(utils OBJECT
@@ -31,12 +32,10 @@ add_library(utils OBJECT
     ${utils_dir}/mem.c
 )
 target_include_directories(utils PUBLIC ${utils_dir})
-target_compile_options(utils PRIVATE ${flags})
 
 set(testing_dir "src/common/testing")
 add_library(testing OBJECT ${testing_dir}/testing.c)
 target_include_directories(testing PUBLIC ${testing_dir})
-target_compile_options(testing PRIVATE ${flags})
 
 set(day_targets "")
 set(test_targets "")
@@ -63,9 +62,7 @@ foreach(day_num RANGE 1 25)
     if(TARGET day04)
         target_link_libraries(${day_target} PRIVATE OpenSSL::Crypto)
     endif()
-
     target_link_libraries(${day_target} PRIVATE utils)
-    target_compile_options(${day_target} PRIVATE ${flags})
 
     add_library(${test_target} OBJECT ${day_dir}/${test_target}.c)
     target_link_libraries(${test_target} PRIVATE
@@ -73,7 +70,6 @@ foreach(day_num RANGE 1 25)
         testing
         ${day_target}
     )
-    target_compile_options(${test_target} PRIVATE ${flags})
 
     file(READ
         "${CMAKE_CURRENT_SOURCE_DIR}/${day_dir}/${test_target}.c" file_str)
@@ -94,8 +90,6 @@ target_link_libraries(test_runner PRIVATE
     ${day_targets}
     ${test_targets}
 )
-target_compile_options(test_runner PRIVATE ${flags})
 
 add_executable(main main.c)
 target_link_libraries(main PRIVATE utils ${day_targets})
-target_compile_options(main PRIVATE ${flags})

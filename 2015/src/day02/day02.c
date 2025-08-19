@@ -8,14 +8,14 @@
 
 void day02_main(void) {
     char** input = file_to_array("./src/day02/data/input.txt");
-    printf("2015:d02p1 - %u\n", day02_part1(input));
-    printf("2015:d02p2 - %u\n", day02_part2(input));
+    printf("2015:d02p1 - %u\n", day02_part1((const char* const*)input));
+    printf("2015:d02p2 - %u\n", day02_part2((const char* const*)input));
     free_array((void**)input);
 }
 
-uint32_t day02_part1(char** input) {
+uint32_t day02_part1(const char* const* input) {
     uint32_t total = 0;
-    for (char** i = input; *i != nullptr; i++) {
+    for (const char* const* i = input; *i != nullptr; i++) {
         uint8_t l, w, h;
         if (sscanf(*i, "%hhux%hhux%hhu", &l, &w, &h) != 3) {
             fprintf(stderr, "failed to parse line '%s'\n", *i);
@@ -29,9 +29,9 @@ uint32_t day02_part1(char** input) {
     return total;
 }
 
-uint32_t day02_part2(char** input) {
+uint32_t day02_part2(const char* const* input) {
     uint32_t total = 0;
-    for (char** i = input; *i != nullptr; i++) {
+    for (const char* const* i = input; *i != nullptr; i++) {
         uint8_t l, w, h;
         if (sscanf(*i, "%hhux%hhux%hhu", &l, &w, &h) != 3) {
             fprintf(stderr, "failed to parse line '%s'\n", *i);

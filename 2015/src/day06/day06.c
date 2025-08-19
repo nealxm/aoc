@@ -8,8 +8,8 @@
 
 void day06_main(void) {
     char** input = file_to_array("./src/day06/data/input.txt");
-    printf("2015:d06p1 - %u\n", day06_part1(input));
-    printf("2015:d06p2 - %u\n", day06_part2(input));
+    printf("2015:d06p1 - %u\n", day06_part1((const char* const*)input));
+    printf("2015:d06p2 - %u\n", day06_part2((const char* const*)input));
     free_array((void**)input);
 }
 
@@ -42,7 +42,7 @@ static void state_free(state* s) {
     free(s);
 }
 
-static state* state_init(char** input) {
+static state* state_init(const char* const* input) {
     state* s = malloc(sizeof(state));
     if (!s) {
         fprintf(stderr, "failed to allocate memory for state\n");
@@ -54,7 +54,7 @@ static state* state_init(char** input) {
         }
     }
     uint16_t lines = 0;
-    for (char** l = input; *l; ++l) {
+    for (const char* const* l = input; *l; ++l) {
         ++lines;
     }
     s->instrs = (instr**)malloc((lines + 1) * sizeof(instr*));
@@ -63,31 +63,43 @@ static state* state_init(char** input) {
         free(s);
         return nullptr;
     }
-    for (uint16_t i = 0; i < lines; ++i) {
-        char* l = input[i];
+    for (const char* const* l = input; *l; ++l) {
         instr_kind kind;
         uint16_t srt_r, srt_c, end_r, end_c;
 
-        if (sscanf(l, "turn off %hu,%hu through %hu,%hu", &srt_c, &srt_r, &end_c, &end_r) == 4) {
+        if (
+            sscanf(*l, "turn off %hu,%hu through %hu,%hu", //
+                   &srt_c, &srt_r, &end_c, &end_r) == 4
+        ) {
             kind = off;
-        } else if (sscanf(l, "turn on %hu,%hu through %hu,%hu", &srt_c, &srt_r, &end_c, &end_r) == 4) {
+        } else if (
+            sscanf(*l, "turn on %hu,%hu through %hu,%hu", //
+                   &srt_c, &srt_r, &end_c, &end_r) == 4
+        ) {
             kind = on;
-        } else if (sscanf(l, "toggle %hu,%hu through %hu,%hu", &srt_c, &srt_r, &end_c, &end_r) == 4) {
+        } else if (
+            sscanf(*l, "toggle %hu,%hu through %hu,%hu", //
+                   &srt_c, &srt_r, &end_c, &end_r) == 4
+        ) {
             kind = toggle;
         } else {
-            fprintf(stderr, "failed to parse instruction: %s\n", l);
+            fprintf(stderr, "failed to parse instruction: %s\n", *l);
             state_free(s);
             return nullptr;
         }
         instr* new_instr = malloc(sizeof(instr));
-        *new_instr = (instr){.kind = kind, .srt = {.r = srt_r, .c = srt_c}, .end = {.r = end_r, .c = end_c}};
-        s->instrs[i] = new_instr;
+        *new_instr = (instr){
+            .kind = kind,
+            .srt = {.r = srt_r, .c = srt_c},
+            .end = {.r = end_r, .c = end_c},
+        };
+        s->instrs[l - input] = new_instr;
     }
     s->instrs[lines] = nullptr;
     return s;
 }
 
-uint32_t day06_part1(char** input) {
+uint32_t day06_part1(const char* const* input) {
     state* s = state_init(input);
     for (instr** i = s->instrs; *i; ++i) {
         instr* curr = *i;
@@ -121,7 +133,7 @@ uint32_t day06_part1(char** input) {
     return total;
 }
 
-uint32_t day06_part2(char** input) {
+uint32_t day06_part2(const char* const* input) {
     state* s = state_init(input);
     for (instr** i = s->instrs; *i; ++i) {
         instr* curr = *i;

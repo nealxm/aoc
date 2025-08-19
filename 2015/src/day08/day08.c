@@ -9,18 +9,18 @@
 
 void day08_main(void) {
     char** input = file_to_array("./src/day08/data/input.txt");
-    printf("2015:d08p1 - %hd\n", day08_part1(input));
-    printf("2015:d08p2 - %hd\n", day08_part2(input));
+    printf("2015:d08p1 - %hd\n", day08_part1((const char* const*)input));
+    printf("2015:d08p2 - %hd\n", day08_part2((const char* const*)input));
     free_array((void**)input);
 }
 
-int16_t day08_part1(char** input) {
+int16_t day08_part1(const char* const* input) {
     uint16_t raw = 0, mem = 0;
 
-    for (char** l = input; *l; ++l) {
+    for (const char* const* l = input; *l; ++l) {
         raw += strlen(*l);
 
-        for (char* c = *l + 1; *(c + 1); ++c) {
+        for (const char* c = *l + 1; *(c + 1); ++c) {
             if (*c == '\\') {
                 switch (*(c + 1)) {
                 case '\\':
@@ -44,14 +44,14 @@ int16_t day08_part1(char** input) {
     return raw - mem;
 }
 
-int16_t day08_part2(char** input) {
+int16_t day08_part2(const char* const* input) {
     uint16_t raw = 0, enc = 0;
 
-    for (char** l = input; *l; ++l) {
+    for (const char* const* l = input; *l; ++l) {
         raw += strlen(*l);
         enc += 2;
 
-        for (char* c = *l; *c; ++c) {
+        for (const char* c = *l; *c; ++c) {
             switch (*c) {
             case '\\':
             case '\"':

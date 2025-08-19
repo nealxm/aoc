@@ -9,8 +9,8 @@
 
 void day07_main(void) {
     char** input = file_to_array("./src/day07/data/input.txt");
-    printf("2015:d07p1 - %hu\n", day07_part1(input));
-    printf("2015:d07p2 - %hu\n", day07_part2(input));
+    printf("2015:d07p1 - %hu\n", day07_part1((const char* const*)input));
+    printf("2015:d07p2 - %hu\n", day07_part2((const char* const*)input));
     free_array((void**)input);
 }
 
@@ -63,64 +63,63 @@ static void state_free(state* s) {
     free(s);
 }
 
-static state* state_init(char** input) {
+static state* state_init(const char* const* input) {
     state* s = malloc(sizeof(state));
     uint16_t lines = 0;
-    for (char** l = input; *l; ++l) {
+    for (const char* const* l = input; *l; ++l) {
         ++lines;
     }
     instr** instrs = (instr**)calloc(lines + 1, sizeof(instr*));
 
-    for (uint16_t i = 0; i < lines; ++i) {
-        char* l = input[i];
+    for (const char* const* l = input; *l; ++l) {
         instr* new = calloc(1, sizeof(instr));
         char i1[4], i2[4], o[4];
         uint16_t a;
 
-        if (sscanf(l, "%hu -> %s", &a, o) == 2) {
+        if (sscanf(*l, "%hu -> %s", &a, o) == 2) {
             new->kind = assign;
             new->arg = a;
             new->out = strdup(o);
-        } else if (sscanf(l, "%s -> %s", i1, o) == 2) {
+        } else if (sscanf(*l, "%s -> %s", i1, o) == 2) {
             new->kind = assign;
             new->in1 = strdup(i1);
             new->out = strdup(o);
-        } else if (sscanf(l, "%hu AND %s -> %s", &a, i2, o) == 3) {
+        } else if (sscanf(*l, "%hu AND %s -> %s", &a, i2, o) == 3) {
             new->kind = and;
             new->arg = a;
             new->in2 = strdup(i2);
             new->out = strdup(o);
-        } else if (sscanf(l, "%s AND %s -> %s", i1, i2, o) == 3) {
+        } else if (sscanf(*l, "%s AND %s -> %s", i1, i2, o) == 3) {
             new->kind = and;
             new->in1 = strdup(i1);
             new->in2 = strdup(i2);
             new->out = strdup(o);
-        } else if (sscanf(l, "%s OR %s -> %s", i1, i2, o) == 3) {
+        } else if (sscanf(*l, "%s OR %s -> %s", i1, i2, o) == 3) {
             new->kind = or ;
             new->in1 = strdup(i1);
             new->in2 = strdup(i2);
             new->out = strdup(o);
-        } else if (sscanf(l, "%s LSHIFT %hu -> %s", i1, &a, o) == 3) {
+        } else if (sscanf(*l, "%s LSHIFT %hu -> %s", i1, &a, o) == 3) {
             new->kind = lshift;
             new->in1 = strdup(i1);
             new->out = strdup(o);
             new->arg = a;
-        } else if (sscanf(l, "%s RSHIFT %hu -> %s", i1, &a, o) == 3) {
+        } else if (sscanf(*l, "%s RSHIFT %hu -> %s", i1, &a, o) == 3) {
             new->kind = rshift;
             new->in1 = strdup(i1);
             new->out = strdup(o);
             new->arg = a;
-        } else if (sscanf(l, "NOT %s -> %s", i1, o) == 2) {
+        } else if (sscanf(*l, "NOT %s -> %s", i1, o) == 2) {
             new->kind = not;
             new->in1 = strdup(i1);
             new->out = strdup(o);
         } else {
-            fprintf(stderr, "invalid instruction %s\n", l);
+            fprintf(stderr, "invalid instruction %s\n", *l);
             free((void*)instrs);
             free(new);
             return nullptr;
         }
-        instrs[i] = new;
+        instrs[l - input] = new;
     }
     s->instrs = instrs;
     s->wires = (wire**)calloc(1, sizeof(wire*));
@@ -208,14 +207,14 @@ static uint16_t resolve_wire(state* s, char* n) {
     return res;
 }
 
-uint16_t day07_part1(char** input) {
+uint16_t day07_part1(const char* const* input) {
     state* s = state_init(input);
     uint16_t out = resolve_wire(s, "a");
     state_free(s);
     return out;
 }
 
-uint16_t day07_part2(char** input) {
+uint16_t day07_part2(const char* const* input) {
     state* s = state_init(input);
     uint16_t a_val = resolve_wire(s, "a");
     state_free(s);

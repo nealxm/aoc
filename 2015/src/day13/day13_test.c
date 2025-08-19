@@ -13,7 +13,7 @@ const test_entry* day13_tests[] = {
 
 int64_t day13_test_run(const test_entry* te) {
     char** input = file_to_array(te->file);
-    int64_t r = (te->p == one) ? day13_part1(input) : day13_part2(input);
+    int64_t r = (te->p == one) ? day13_part1((const char* const*)input) : day13_part2((const char* const*)input);
     free_array((void**)input);
     return r;
 }
