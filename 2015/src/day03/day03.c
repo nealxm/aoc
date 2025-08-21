@@ -37,7 +37,7 @@ static state* state_init(const char* input) {
         .curr = {0, 0},
         .curr_r = {0, 0},
         .visited_len = 1,
-        .visited = malloc(sizeof(pos)),
+        .visited = malloc(sizeof(pos))
     };
     s->visited[0] = (pos){0, 0};
     return s;

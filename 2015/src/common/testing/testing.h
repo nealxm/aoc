@@ -13,7 +13,7 @@
 
 typedef enum {
     one,
-    two,
+    two
 } part;
 
 typedef struct {
@@ -62,6 +62,8 @@ extern const test_entry* day13_tests[];
 int64_t day13_test_run(const test_entry*);
 extern const test_entry* day14_tests[];
 int64_t day14_test_run(const test_entry*);
+extern const test_entry* day15_tests[];
+int64_t day15_test_run(const test_entry*);
 static const registry_entry* registry[] = {
     RE("day01", day01_tests, day01_test_run),
     RE("day02", day02_tests, day02_test_run),
@@ -77,5 +79,6 @@ static const registry_entry* registry[] = {
     RE("day12", day12_tests, day12_test_run),
     RE("day13", day13_tests, day13_test_run),
     RE("day14", day14_tests, day14_test_run),
+    RE("day15", day15_tests, day15_test_run),
     nullptr
 };

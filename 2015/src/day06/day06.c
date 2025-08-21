@@ -91,7 +91,7 @@ static state* state_init(const char* const* input) {
         *new_instr = (instr){
             .kind = kind,
             .srt = {.r = srt_r, .c = srt_c},
-            .end = {.r = end_r, .c = end_c},
+            .end = {.r = end_r, .c = end_c}
         };
         s->instrs[l - input] = new_instr;
     }
