@@ -1,7 +1,4 @@
 cmake_minimum_required(VERSION 4.0.0)
-if(APPLE)
-    set(CMAKE_C_COMPILER "/opt/homebrew/opt/llvm/bin/clang")
-endif()
 project(aoc2015 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 23)
@@ -10,8 +7,8 @@ set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CONFIGURATION_TYPES Release;Debug)
-set(CMAKE_DEFAULT_BUILD_TYPE Release)
-set(CMAKE_C_FLAGS "-Wall -Wextra -Wpedantic -Weverything \
+set(CMAKE_C_FLAGS "-Wall -Wextra -pedantic -Weverything \
+-fcolor-diagnostics \
 -Wno-pre-c23-compat \
 -Wno-declaration-after-statement \
 -Wno-poison-system-directories \
@@ -19,7 +16,7 @@ set(CMAKE_C_FLAGS "-Wall -Wextra -Wpedantic -Weverything \
 -Wno-padded \
 -Wno-covered-switch-default")
 set(CMAKE_C_FLAGS_RELEASE "-O3")
-set(CMAKE_C_FLAGS_DEBUG "-O0 -g3")
+set(CMAKE_C_FLAGS_DEBUG "-O0 -glldb")
 
 include(CTest)
 enable_testing()
@@ -72,9 +69,11 @@ foreach(day_num RANGE 1 25)
     )
 
     file(READ
-        "${CMAKE_CURRENT_SOURCE_DIR}/${day_dir}/${test_target}.c" file_str)
+        "${CMAKE_CURRENT_SOURCE_DIR}/${day_dir}/${test_target}.c" file_str
+    )
     string(REGEX MATCHALL
-        "d[0-9][0-9]_p[0-9]_(e[0-9][0-9]|i)" matches ${file_str})
+        "d[0-9][0-9]_p[0-9]_(e[0-9][0-9]|i)" matches ${file_str}
+    )
     foreach(match ${matches})
         add_test(NAME ${match}
             COMMAND test_runner ${day_target} ${match}

@@ -23,6 +23,7 @@ Diagnostics:
       - readability-isolate-declaration
       - readability-implicit-bool-conversion
       - readability-function-cognitive-complexity
+      - readability-else-after-return
       - misc-no-recursion
     FastCheckFilter: None
 

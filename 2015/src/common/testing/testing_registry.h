@@ -1,38 +1,6 @@
-#pragma once
+#include "testing_base.h"
 
 #include <stdint.h>
-
-#define TE(f, n, p, e) \
-    &(test_entry) {    \
-        f, n, p, e     \
-    }
-#define RE(l, t, r)     \
-    &(registry_entry) { \
-        l, t, r         \
-    }
-
-typedef enum {
-    one,
-    two
-} part;
-
-typedef struct {
-    const char* file;
-    const char* name;
-    part p;
-    int64_t expected;
-} test_entry;
-
-typedef struct {
-    const char* library_name;
-    const test_entry** tests;
-    int64_t (*test_run)(const test_entry*);
-} registry_entry;
-
-uint8_t eval_test(const char*, const char*);
-
-const registry_entry* find_re(const char*);
-const test_entry* find_te(const registry_entry*, const char*);
 
 extern const test_entry* day01_tests[];
 int64_t day01_test_run(const test_entry*);
@@ -66,6 +34,10 @@ extern const test_entry* day15_tests[];
 int64_t day15_test_run(const test_entry*);
 extern const test_entry* day16_tests[];
 int64_t day16_test_run(const test_entry*);
+extern const test_entry* day17_tests[];
+int64_t day17_test_run(const test_entry*);
+extern const test_entry* day18_tests[];
+int64_t day18_test_run(const test_entry*);
 static const registry_entry* registry[] = {
     RE("day01", day01_tests, day01_test_run),
     RE("day02", day02_tests, day02_test_run),
@@ -83,5 +55,7 @@ static const registry_entry* registry[] = {
     RE("day14", day14_tests, day14_test_run),
     RE("day15", day15_tests, day15_test_run),
     RE("day16", day16_tests, day16_test_run),
+    RE("day17", day17_tests, day17_test_run),
+    RE("day18", day18_tests, day18_test_run),
     nullptr
 };

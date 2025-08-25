@@ -1,5 +1,6 @@
 #include "day08.h"
-#include "testing.h"
+#include "testing_base.h"
+#include "testing_registry.h"
 #include "utils.h"
 
 #include <stdint.h>
