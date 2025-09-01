@@ -134,7 +134,7 @@ static int8_t find_rule(state* s, uint8_t subj, uint8_t neig) {
     }
     for (rule** r = s->rules; *r; ++r) {
         if (strcmp(s->people[subj], (*r)->subj) == 0 && strcmp(s->people[neig], (*r)->neig) == 0) {
-            return (*r)->kind == gain ? (int8_t)(*r)->mod : -(*r)->mod;
+            return (*r)->kind == gain ? (int8_t)(*r)->mod : (int8_t)-(*r)->mod;
         }
     }
     return 0;

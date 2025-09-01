@@ -172,7 +172,7 @@ static uint16_t resolve_wire(state* s, char* n) {
         res = resolve_wire(s, curr->in1) >> curr->arg;
         break;
     case not:
-        res = ~resolve_wire(s, curr->in1);
+        res = (uint16_t)~resolve_wire(s, curr->in1);
         break;
     default:
         fprintf(stderr, "unknown instruction kind %u\n", curr->kind);

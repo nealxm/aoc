@@ -16,6 +16,7 @@
 #include "day16.h"
 #include "day17.h"
 #include "day18.h"
+#include "day19.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,7 +44,8 @@ static day days[25] = {
     {"15", day15_main},
     {"16", day16_main},
     {"17", day17_main},
-    {"18", day18_main}
+    {"18", day18_main},
+    {"19", day19_main}
 };
 
 int main(int argc, char** argv) {

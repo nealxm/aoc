@@ -10,6 +10,7 @@ set(CMAKE_CONFIGURATION_TYPES Release;Debug)
 set(CMAKE_C_FLAGS "-Wall -Wextra -pedantic -Weverything \
 -fcolor-diagnostics \
 -Wno-pre-c23-compat \
+-Wno-c++-compat \
 -Wno-declaration-after-statement \
 -Wno-poison-system-directories \
 -Wno-unsafe-buffer-usage \

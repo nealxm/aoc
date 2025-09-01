@@ -3,7 +3,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-int64_t min(uint8_t count, ...) {
+int64_t min(int count, ...) {
     va_list args;
     va_start(args, count);
 
@@ -18,7 +18,7 @@ int64_t min(uint8_t count, ...) {
     return min;
 }
 
-int64_t max(uint8_t count, ...) {
+int64_t max(int count, ...) {
     va_list args;
     va_start(args, count);
 
