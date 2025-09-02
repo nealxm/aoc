@@ -11,34 +11,44 @@
 void day19_main(void) {
     char** input = file_to_array("./src/day19/data/input.txt");
     printf("2015:d19p1 - %hu\n", day19_part1((const char* const*)input));
-    printf("2015:d19p2 - %hu\n", day19_part2((const char* const*)input));
+    printf("2015:d19p2 - %hhu\n", day19_part2((const char* const*)input));
     free_array((void**)input);
 }
 
 typedef struct {
-    char **ins, **outs, **mols;
-    uint16_t num_mol;
+    char *in, *out;
+} rule;
+
+typedef struct {
+    rule** rules;
     char* start;
+    uint16_t num_mol, max_mol;
 } state;
 
 static void state_free(state* s) {
     if (!s) {
         return;
     }
-    for (char** i = s->ins; *i; ++i) {
-        free(*i);
+    for (rule** r = s->rules; *r; ++r) {
+        free((*r)->in);
+        free((*r)->out);
+        free(*r);
     }
-    for (char** i = s->outs; *i; ++i) {
-        free(*i);
-    }
-    for (char** i = s->mols; *i; ++i) {
-        free(*i);
-    }
-    free((void*)s->ins);
-    free((void*)s->outs);
-    free((void*)s->mols);
+    free((void*)s->rules);
     free(s->start);
     free(s);
+}
+
+static int compare_descend(const void* a, const void* b) {
+    const rule* rule_a = *(const rule* const*)a;
+    const rule* rule_b = *(const rule* const*)b;
+
+    size_t len_a = strlen(rule_a->out);
+    size_t len_b = strlen(rule_b->out);
+    if (len_b != len_a) {
+        return (int)len_b - (int)len_a;
+    }
+    return strcmp(rule_a->out, rule_b->out);
 }
 
 static state* state_init(const char* const* input) {
@@ -51,10 +61,9 @@ static state* state_init(const char* const* input) {
         fprintf(stderr, "failed to allocate memory for state");
         goto bad_exit;
     }
-    s->ins = (char**)calloc(n, sizeof(char*));
-    s->outs = (char**)calloc(n, sizeof(char*));
-    if (!s->ins || !s->outs) {
-        fprintf(stderr, "failed to allocate memory for ins or outs or unique");
+    s->rules = (rule**)calloc(n, sizeof(rule*));
+    if (!s->rules) {
+        fprintf(stderr, "failed to allocate memory for rules");
         goto bad_exit;
     }
 
@@ -65,11 +74,19 @@ static state* state_init(const char* const* input) {
             s->start = strdup(*l);
             continue;
         }
-        uint8_t i = (uint8_t)(l - input);
-        s->ins[i] = strndup(*l, (size_t)(delim - *l));
-        s->outs[i] = strdup(delim + 4);
+        s->rules[l - input] = malloc(sizeof(rule));
+        if (!s->rules[l - input]) {
+            fprintf(stderr, "failed to allocate rule");
+            goto bad_exit;
+        }
+
+        *(s->rules[l - input]) = (rule){
+            .in = strndup(*l, (size_t)(delim - *l)),
+            .out = strdup(delim + 4)
+        };
     }
-    s->mols = (char**)calloc(n * strlen(s->start), sizeof(char*));
+    qsort((void*)s->rules, n - 1, sizeof(rule*), compare_descend);
+    s->max_mol = (uint16_t)strlen(s->start) * 4;
     return s;
 bad_exit:
     state_free(s);
@@ -78,24 +95,25 @@ bad_exit:
 
 uint16_t day19_part1(const char* const* input) {
     state* s = state_init(input);
-    char* tmp_mol = malloc(strlen(s->start));
+    char* tmp_mol = calloc(s->max_mol, sizeof(char));
+    char** mols = (char**)calloc(s->max_mol, sizeof(char*));
+    uint16_t out = 0;
 
-    for (char** i = s->ins; *i; ++i) {
-        ptrdiff_t n = i - s->ins;
-        size_t in_len = strlen(*i);
-        size_t out_len = strlen(s->outs[n]);
+    for (rule** r = s->rules; *r; ++r) {
+        size_t in_len = strlen((*r)->in);
+        size_t out_len = strlen((*r)->out);
 
         char* c = s->start;
-        while ((c = strstr(c, *i)) != nullptr) {
+        while ((c = strstr(c, (*r)->in)) != nullptr) {
             ptrdiff_t bef_len = c - s->start;
 
             strncpy(tmp_mol, s->start, bef_len);
-            strcpy(tmp_mol + bef_len, s->outs[n]);
+            strcpy(tmp_mol + bef_len, (*r)->out);
             strcpy(tmp_mol + bef_len + out_len, c + in_len);
             tmp_mol[strlen(s->start) - in_len + out_len] = '\0';
 
             bool found = false;
-            char** j = s->mols;
+            char** j = mols;
             while (*j) {
                 if (!strcmp(*j, tmp_mol)) {
                     found = true;
@@ -105,19 +123,58 @@ uint16_t day19_part1(const char* const* input) {
             }
             if (!found) {
                 *j = strdup(tmp_mol);
-                ++(s->num_mol);
+                ++out;
             }
             ++c;
         }
     }
-    uint16_t out = s->num_mol;
     state_free(s);
+    free(tmp_mol);
+    for (char** j = mols; *j; ++j) {
+        free(*j);
+    }
+    free((void*)mols);
     return out;
 }
 
-uint16_t day19_part2(const char* const* input) {
-    state* s = state_init(input);
+static uint8_t find_target(state* s, uint8_t iter, char* curr_mol) {
+    if (strcmp(curr_mol, "e") == 0) {
+        return iter;
+    }
+    char* tmp_mol = calloc(s->max_mol, sizeof(char));
 
+    for (rule** r = s->rules; *r; ++r) {
+        size_t out_len = strlen((*r)->out);
+        size_t in_len = strlen((*r)->in);
+        size_t new_len = strlen(curr_mol) - out_len + in_len;
+        if (out_len > strlen(curr_mol) || new_len >= s->max_mol) {
+            continue;
+        }
+
+        char* c = curr_mol;
+        while ((c = strstr(c, (*r)->out)) != nullptr) {
+            ptrdiff_t bef_len = c - curr_mol;
+
+            strncpy(tmp_mol, curr_mol, bef_len);
+            strcpy(tmp_mol + bef_len, (*r)->in);
+            strcpy(tmp_mol + bef_len + in_len, c + out_len);
+            tmp_mol[new_len] = '\0';
+
+            uint8_t res = find_target(s, iter + 1, tmp_mol);
+            return res;
+        }
+    }
+    free(tmp_mol);
+    return UINT8_MAX;
+}
+
+uint8_t day19_part2(const char* const* input) {
+    state* s = state_init(input);
+    char* tmp_mol = calloc(s->max_mol, sizeof(char));
+    strcpy(tmp_mol, s->start);
+
+    uint8_t out = find_target(s, 0, tmp_mol);
     state_free(s);
-    return 0;
+    free(tmp_mol);
+    return out;
 }
