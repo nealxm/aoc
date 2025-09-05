@@ -77,8 +77,10 @@ int32_t day12_part2(const char* input) {
             assert(arr_depth >= 1);
 
             --arr_depth;
-        } else if (obj_depth >= 1 && !obj_stack[obj_depth - 1].red && obj_stack[obj_depth - 1].start_ad == arr_depth &&
-                   *csr == 'r' && csr[1] == 'e' && csr[2] == 'd') {
+        } else if (
+            obj_depth >= 1 && !obj_stack[obj_depth - 1].red && obj_stack[obj_depth - 1].start_ad == arr_depth && //
+            *csr == 'r' && csr[1] == 'e' && csr[2] == 'd'
+        ) {
             obj_stack[obj_depth - 1].red = true;
             csr += 3;
             continue;

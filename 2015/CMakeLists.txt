@@ -77,19 +77,19 @@ foreach(day_num RANGE 1 25)
     )
     foreach(match ${matches})
         add_test(NAME ${match}
-            COMMAND test_runner ${day_target} ${match}
+            COMMAND ${CMAKE_PROJECT_NAME}_test ${day_target} ${match}
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${day_dir}"
         )
     endforeach()
 endforeach()
 
-add_executable(test_runner ${testing_dir}/runner.c)
-target_link_libraries(test_runner PRIVATE
+add_executable(${CMAKE_PROJECT_NAME}_test ${testing_dir}/runner.c)
+target_link_libraries(${CMAKE_PROJECT_NAME}_test PRIVATE
     utils
     testing
     ${day_targets}
     ${test_targets}
 )
 
-add_executable(main main.c)
-target_link_libraries(main PRIVATE utils ${day_targets})
+add_executable(${CMAKE_PROJECT_NAME} main.c)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE utils ${day_targets})

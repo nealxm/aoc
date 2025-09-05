@@ -17,3 +17,4 @@ BinPackArguments: true
 BinPackParameters: true
 AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: None
+BreakBinaryOperations: OnePerLine

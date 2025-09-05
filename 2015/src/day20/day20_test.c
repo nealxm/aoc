@@ -4,7 +4,6 @@
 #include "utils.h"
 
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 const test_entry* day20_tests[] = {
