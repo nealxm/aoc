@@ -37,7 +37,7 @@ uint32_t day02_part2(const char* const* input) {
             fprintf(stderr, "failed to parse line '%s'\n", *i);
             exit(1);
         }
-        total += 2 * (l + w + h - (uint32_t)max(3, l, w, h)) + (l * w * h);
+        total += (2 * (l + w + h - (uint32_t)max(3, l, w, h))) + (l * w * h);
     }
     return total;
 }

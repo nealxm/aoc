@@ -9,7 +9,7 @@
 static int64_t str_to_b26(const char* str) {
     int64_t res = 0;
     for (const char* c = str; *c; ++c) {
-        res = res * 26 + (*c - 'a');
+        res = (res * 26) + (*c - 'a');
     }
     return res;
 }

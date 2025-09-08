@@ -3,7 +3,6 @@
 #include "utils.h"
 
 #include <assert.h>
-#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,7 +42,7 @@ static state* state_init(const char* const* input) {
     state* s = malloc(sizeof(state));
     s->num_bucks = n;
     s->min_bucks = UINT8_MAX;
-    s->bucks = (bucket**)calloc(n, sizeof(bucket*));
+    s->bucks = (bucket**)calloc(n + 1, sizeof(bucket*));
     if (!s || !s->bucks) {
         fprintf(stderr, "failed to allocate state\n");
         goto bad_exit;

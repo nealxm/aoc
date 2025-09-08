@@ -51,7 +51,7 @@ int32_t day12_part2(const char* input) {
             ++obj_depth;
 
             if (obj_depth > cap) {
-                obj_state* new = realloc(obj_stack, (++cap) + sizeof(obj_state));
+                obj_state* new = realloc(obj_stack, (++cap) * sizeof(obj_state));
                 if (!new) {
                     free(obj_stack);
                     fprintf(stderr, "failed to reallocate obj_stack\n");
