@@ -15,7 +15,8 @@ set(CMAKE_C_FLAGS "-Wall -Wextra -pedantic -Weverything \
 -Wno-poison-system-directories \
 -Wno-unsafe-buffer-usage \
 -Wno-padded \
--Wno-covered-switch-default")
+-Wno-covered-switch-default \
+-Wno-vla")
 set(CMAKE_C_FLAGS_RELEASE "-O3")
 set(CMAKE_C_FLAGS_DEBUG "-O0 -glldb")
 
