@@ -22,7 +22,9 @@
 #include "day22.h"
 #include "day23.h"
 #include "day24.h"
+#include "day25.h"
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -55,7 +57,8 @@ static day days[25] = {
     {"21", day21_main},
     {"22", day22_main},
     {"23", day23_main},
-    {"24", day24_main}
+    {"24", day24_main},
+    {"25", day25_main}
 };
 
 int main(int argc, char** argv) {
@@ -63,9 +66,9 @@ int main(int argc, char** argv) {
         fprintf(stderr, "invalid arguements: must specify an aoc day to run (1-25)\n");
         return 1;
     }
-    int d = atoi(argv[1]);
+    int8_t d = (int8_t)atoi(argv[1]);
 
-    if (d < 1 || d > 25) {
+    if (d < 1 || d > 25 || days[d - 1].func == nullptr) {
         fprintf(stderr, "invalid day: either not implemented or not 1-25\n");
         return 1;
     }
