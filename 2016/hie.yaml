@@ -1,0 +1,7 @@
+cradle:
+  cabal:
+    - path: "./src"
+      component: "lib:aoc2016"
+
+    - path: "./app"
+      component: "exe:aoc2016"

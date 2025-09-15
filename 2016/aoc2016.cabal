@@ -1,0 +1,27 @@
+cabal-version: 3.8
+name: aoc2016
+version: 0.0.0
+build-type: Simple
+
+common options
+    default-language: GHC2024
+    ghc-options: -Weverything
+    default-extensions:
+        Safe,
+        NoGeneralizedNewtypeDeriving,
+        OverloadedStrings
+    build-depends:
+        base,
+        text
+
+library
+    import: options
+    exposed-modules: Day01.Day01
+    hs-source-dirs: src
+
+executable aoc2016
+    import: options
+    ghc-options: -Wno-unused-packages
+    main-is: Main.hs
+    hs-source-dirs: app
+    build-depends: aoc2016
