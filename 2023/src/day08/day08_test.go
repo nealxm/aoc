@@ -1,71 +1,33 @@
 package day08
 
 import (
-	"log"
+	at "aoc2023/common/aoc_testing"
 	"os"
 	"testing"
 )
 
-var example1, example2, example3, input *string
+var example01, example02, example03, input *string
 
 func TestMain(m *testing.M) {
-	example1File, err := os.ReadFile("./data/example1.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	example2File, err := os.ReadFile("./data/example2.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	example3File, err := os.ReadFile("./data/example3.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	inputFile, err := os.ReadFile("./data/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
+	example01 = at.MustRead("./data/example01.txt")
+	example02 = at.MustRead("./data/example02.txt")
+	example03 = at.MustRead("./data/example03.txt")
+	input = at.MustRead("./data/input.txt")
 
-	e1, e2, e3, i := string(example1File), string(example2File), string(example3File), string(inputFile)
-	example1, example2, example3, input = &e1, &e2, &e3, &i
-
-	code := m.Run()
-	os.Exit(code)
+	os.Exit(m.Run())
 }
 
-type testCase struct {
-	name     string
-	input    *string
-	expected int
+func TestD08p1(t *testing.T) {
+	at.Run(t, part1, []at.Case[uint16]{
+		{Name: "d08_p1_e01", Input: example01, Expected: 2},
+		{Name: "d08_p1_e02", Input: example02, Expected: 6},
+		{Name: "d08_p1_i", Input: input, Expected: 18727},
+	})
 }
 
-func TestD8p1(t *testing.T) {
-	testCases := []testCase{
-		{"example1", example1, 2},
-		{"example2", example2, 6},
-		{"input", input, 18727},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if result := part1(*tc.input); result != tc.expected {
-				t.Errorf("(d8p1) got %d, need %d", result, tc.expected)
-			}
-		})
-	}
-}
-
-func TestD8p2(t *testing.T) {
-	testCases := []testCase{
-		{"example3", example3, 6},
-		{"input", input, 18024643846273},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if result := part2(*tc.input); result != tc.expected {
-				t.Errorf("(d8p2) got %d, need %d", result, tc.expected)
-			}
-		})
-	}
+func TestD08p2(t *testing.T) {
+	at.Run(t, part2, []at.Case[uint64]{
+		{Name: "d08_p2_e03", Input: example03, Expected: 6},
+		{Name: "d08_p2_i", Input: input, Expected: 18024643846273},
+	})
 }

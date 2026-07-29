@@ -15,8 +15,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day seventeen part one: %d\n", part1(string(file)))
-	fmt.Printf("day seventeen part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d12p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d12p2 - %d\n", part2(string(file)))
 }
 
 type dir int8
@@ -120,7 +120,7 @@ func (e *entry) genSteps(grid [][]uint8) (steps []*entry) {
 	return steps
 }
 
-func part1(input string) int {
+func part1(input string) uint16 {
 	grid := parseInput(input)
 
 	pq := &priorityQueue{
@@ -138,7 +138,7 @@ func part1(input string) int {
 			continue
 		}
 		if int(e.vertex.row) == len(grid)-1 && int(e.vertex.col) == len(grid[0])-1 {
-			return int(e.heatloss)
+			return e.heatloss
 		}
 
 		steps := e.genSteps(grid)
@@ -153,6 +153,6 @@ func part1(input string) int {
 	return 0
 }
 
-func part2(input string) int {
+func part2(input string) uint16 {
 	return 0
 }

@@ -14,8 +14,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day sixteen part one: %d\n", part1(string(file)))
-	fmt.Printf("day sixteen part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d16p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d16p2 - %d\n", part2(string(file)))
 }
 
 type direction uint8
@@ -76,7 +76,7 @@ func moveBeam(b beam) beam {
 	return beam{b.row + offset[0], b.col + offset[1], b.dir}
 }
 
-func processBeam(grid [][]byte, start beam) int {
+func processBeam(grid [][]byte, start beam) uint16 {
 	s := &state{
 		grid,
 		make(map[[2]int16]map[direction]bool),
@@ -140,17 +140,17 @@ func processBeam(grid [][]byte, start beam) int {
 			}
 		}
 	}
-	return len(s.energized)
+	return uint16(len(s.energized))
 }
 
-func part1(input string) int {
+func part1(input string) uint16 {
 	return processBeam(parseInput(input), beam{
 		0, 0,
 		right,
 	})
 }
 
-func part2(input string) (maxE int) {
+func part2(input string) (maxE uint16) {
 	grid := parseInput(input)
 	for r, row := range grid {
 		for c := range row {

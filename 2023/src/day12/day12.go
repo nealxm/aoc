@@ -14,8 +14,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day twelve part one: %d\n", part1(string(file)))
-	fmt.Printf("day twelve part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d12p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d12p2 - %d\n", part2(string(file)))
 }
 
 type rowCond struct {
@@ -26,9 +26,10 @@ type rowCond struct {
 func processInput1(input string) (springRows []rowCond) {
 	for i, line := range strings.Split(input, "\n") {
 		for j, part := range strings.Split(line, " ") {
-			if j == 0 {
+			switch j {
+			case 0:
 				springRows = append(springRows, rowCond{springs: part})
-			} else if j == 1 {
+			case 1:
 				for _, aNum := range strings.Split(part, ",") {
 					iNum, err := strconv.ParseInt(aNum, 10, 8)
 					if err != nil {
@@ -42,7 +43,7 @@ func processInput1(input string) (springRows []rowCond) {
 	return springRows
 }
 
-func countArrangements(springs string, groups []uint8, cache map[string]int) (result int) {
+func countArrangements(springs string, groups []uint8, cache map[string]uint64) (result uint64) {
 	key := fmt.Sprintf("%s|%v", springs, groups)
 	if val, exists := cache[key]; exists {
 		return val
@@ -90,17 +91,17 @@ func countArrangements(springs string, groups []uint8, cache map[string]int) (re
 	return result
 }
 
-func computeSum(rowConds []rowCond) (sum int) {
+func computeSum(rowConds []rowCond) (sum uint64) {
 	for _, rc := range rowConds {
-		cache := make(map[string]int)
+		cache := make(map[string]uint64)
 		arrangements := countArrangements(rc.springs, rc.groups, cache)
 		sum += arrangements
 	}
 	return sum
 }
 
-func part1(input string) int {
-	return computeSum(processInput1(input))
+func part1(input string) uint16 {
+	return uint16(computeSum(processInput1(input)))
 }
 
 func processInput2(input string) (springRows []rowCond) {
@@ -125,6 +126,6 @@ func processInput2(input string) (springRows []rowCond) {
 	return springRows
 }
 
-func part2(input string) int {
+func part2(input string) uint64 {
 	return computeSum(processInput2(input))
 }

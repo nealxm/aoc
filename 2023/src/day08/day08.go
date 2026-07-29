@@ -15,8 +15,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day eight part one: %d\n", part1(string(file)))
-	fmt.Printf("day eight part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d08p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d08p2 - %d\n", part2(string(file)))
 }
 
 var nodeRe = regexp.MustCompile(`\w{3}`)
@@ -40,7 +40,7 @@ func processInput1(input string) (string, map[string]node) {
 	return chunks[0], network
 }
 
-func part1(input string) (steps int) {
+func part1(input string) (steps uint16) {
 	dirs, network := processInput1(input)
 	curr := "AAA"
 
@@ -49,9 +49,10 @@ main:
 		for _, char := range dirs {
 			steps++
 
-			if char == 'L' {
+			switch char {
+			case 'L':
 				curr = network[curr].l
-			} else if char == 'R' {
+			case 'R':
 				curr = network[curr].r
 			}
 		}
@@ -82,41 +83,43 @@ func processInput2(input string) (string, []string, map[string]node) {
 	return chunks[0], currs, network
 }
 
-func gcd(a, b int) int {
+func gcd(a, b uint64) uint64 {
 	for b != 0 {
 		a, b = b, a%b
 	}
 	return a
 }
 
-func lcm(a, b int) int {
-	return int(math.Abs(float64(a*b))) / gcd(a, b)
+func lcm(a, b uint64) uint64 {
+	return uint64(math.Abs(float64(a*b))) / gcd(a, b)
 }
 
 // find least common multiple using euclidian algorithm,
 // compare all nums in slice to find overall lcm
-func slicelcm(nums []int) int {
+func slicelcm(nums []uint64) uint64 {
 	result := nums[0]
+
 	for _, num := range nums[1:] {
 		result = lcm(result, num)
 	}
-	return result
+	return uint64(result)
 }
 
-func part2(input string) int {
+func part2(input string) uint64 {
 	dirs, currs, network := processInput2(input)
-	lsteps := []int{}
+	lsteps := []uint64{}
 
 	for i := range currs {
-		steps := 0
+		var steps uint64 = 0
 	main:
 		for {
 			for _, char := range dirs {
 				steps++
 
-				if char == 'L' {
+				switch char {
+				case 'L':
 					currs[i] = network[currs[i]].l
-				} else if char == 'R' {
+				case 'R':
 					currs[i] = network[currs[i]].r
 				}
 			}

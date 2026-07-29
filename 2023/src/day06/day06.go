@@ -15,40 +15,43 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day six part one: %d\n", part1(string(file)))
-	fmt.Printf("day six part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d06p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d06p2 - %d\n", part2(string(file)))
 }
 
 var numRe = regexp.MustCompile(`\d+`)
 
-type race struct {
-	time, dist, comb int
+type race1 struct {
+	time, dist, comb uint16
 }
 
-func processRaces(input string) (races []race) {
+func processRaces(input string) (races []race1) {
 	for i, line := range strings.Split(input, "\n") {
 		for j, sNum := range numRe.FindAllString(line, -1) {
-			dNum, err := strconv.Atoi(sNum)
+			dNum, err := strconv.ParseUint(sNum, 10, 32)
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			if i == 0 {
-				races = append(races, race{
-					time: dNum,
+			switch i {
+			case 0:
+				races = append(races, race1{
+					time: uint16(dNum),
 				})
-			} else if i == 1 {
-				races[j].dist = dNum
+			case 1:
+				races[j].dist = uint16(dNum)
 			}
 		}
 	}
 	return races
 }
 
-func part1(input string) (prod int) {
+func part1(input string) (prod uint32) {
 	races := processRaces(input)
 	for i, race := range races {
-		for ms := 1; ms < race.time; ms++ {
+		var ms uint16
+
+		for ms = 1; ms < race.time; ms++ {
 			att := ms * (race.time - ms)
 
 			if att > race.dist {
@@ -57,38 +60,45 @@ func part1(input string) (prod int) {
 		}
 
 		if i == 0 {
-			prod = races[i].comb
+			prod = uint32(races[i].comb)
 		} else {
-			prod *= races[i].comb
+			prod *= uint32(races[i].comb)
 		}
 	}
 	return prod
 }
 
-func processRace(input string) (race race) {
+type race2 struct {
+	time, dist, comb uint64
+}
+
+func processRace(input string) (race race2) {
 	for i, line := range strings.Split(input, "\n") {
 		var build strings.Builder
 
 		for _, sNum := range numRe.FindAllString(line, -1) {
 			build.WriteString(sNum)
 		}
-		dNum, err := strconv.Atoi(build.String())
+		dNum, err := strconv.ParseUint(build.String(), 10, 64)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if i == 0 {
+		switch i {
+		case 0:
 			race.time = dNum
-		} else if i == 1 {
+		case 1:
 			race.dist = dNum
 		}
 	}
 	return race
 }
 
-func part2(input string) (comb int) {
+func part2(input string) uint32 {
 	race := processRace(input)
-	for ms := 0; ms <= race.time; ms++ {
+	var ms uint64
+
+	for ms = 0; ms <= race.time; ms++ {
 		att := ms * (race.time - ms)
 
 		if att > race.dist {
@@ -96,5 +106,5 @@ func part2(input string) (comb int) {
 			break
 		}
 	}
-	return race.comb
+	return uint32(race.comb)
 }

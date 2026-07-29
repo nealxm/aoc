@@ -14,12 +14,12 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day eleven part one: %d\n", part1(string(file)))
-	fmt.Printf("day eleven part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d11p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d11p2 - %d\n", part2(string(file)))
 }
 
 type vec2 struct {
-	r, c int
+	r, c int32
 }
 
 func findGalaxies(lines []string) ([]bool, []bool) {
@@ -63,34 +63,34 @@ func processInput1(input string) (galaxies []vec2) {
 	for r, row := range grid {
 		for c, chr := range row {
 			if chr == "#" {
-				galaxies = append(galaxies, vec2{r, c})
+				galaxies = append(galaxies, vec2{int32(r), int32(c)})
 			}
 		}
 	}
 	return galaxies
 }
 
-func encode(a, b int) int {
+func encode(a, b int32) int32 {
 	return ((a + b) * (a + b + 1) / 2) + b
 }
 
-func processGalaxies(galaxies []vec2) (sum int) {
-	seen := make(map[int]bool)
+func processGalaxies(galaxies []vec2) (sum uint64) {
+	seen := make(map[int32]bool)
 
 	for i, galaxya := range galaxies {
 		for j, galaxyb := range galaxies {
-			if i == j || seen[encode(i, j)] || seen[encode(j, i)] {
+			if i == j || seen[encode(int32(i), int32(j))] || seen[encode(int32(j), int32(i))] {
 				continue
 			}
-			seen[encode(i, j)] = true
-			sum += int(math.Abs(float64(galaxyb.r-galaxya.r))) + int(math.Abs(float64(galaxyb.c-galaxya.c)))
+			seen[encode(int32(i), int32(j))] = true
+			sum += uint64(math.Abs(float64(galaxyb.r-galaxya.r))) + uint64(math.Abs(float64(galaxyb.c-galaxya.c)))
 		}
 	}
 	return sum
 }
 
-func part1(input string) int {
-	return processGalaxies(processInput1(input))
+func part1(input string) uint32 {
+	return uint32(processGalaxies(processInput1(input)))
 }
 
 func processInput2(input string) (galaxies []vec2) {
@@ -117,13 +117,13 @@ func processInput2(input string) (galaxies []vec2) {
 	for r, line := range lines {
 		for c, chr := range line {
 			if chr == '#' {
-				galaxies = append(galaxies, vec2{r + rowOffset[r], c + colOffset[c]})
+				galaxies = append(galaxies, vec2{int32(r + rowOffset[r]), int32(c + colOffset[c])})
 			}
 		}
 	}
 	return galaxies
 }
 
-func part2(input string) int {
+func part2(input string) uint64 {
 	return processGalaxies(processInput2(input))
 }

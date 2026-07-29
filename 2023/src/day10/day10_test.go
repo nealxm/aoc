@@ -1,96 +1,43 @@
 package day10
 
 import (
-	"log"
+	at "aoc2023/common/aoc_testing"
 	"os"
 	"testing"
 )
 
-var example1a, example1b, example2a, example2b, example3a, example3b, example4a, example4b, input *string
+var example01, example02, example03, example04, example05, example06, example07, example08, input *string
 
 func TestMain(m *testing.M) {
-	example1aFile, err := os.ReadFile("./data/example1a.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	example1bFile, err := os.ReadFile("./data/example1b.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	example2aFile, err := os.ReadFile("./data/example2a.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	example2bFile, err := os.ReadFile("./data/example2b.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	example3aFile, err := os.ReadFile("./data/example3a.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	example3bFile, err := os.ReadFile("./data/example3b.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	example4aFile, err := os.ReadFile("./data/example4a.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	example4bFile, err := os.ReadFile("./data/example4b.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	inputFile, err := os.ReadFile("./data/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
+	example01 = at.MustRead("./data/example01.txt")
+	example02 = at.MustRead("./data/example02.txt")
+	example03 = at.MustRead("./data/example03.txt")
+	example04 = at.MustRead("./data/example04.txt")
+	example05 = at.MustRead("./data/example05.txt")
+	example06 = at.MustRead("./data/example06.txt")
+	example07 = at.MustRead("./data/example07.txt")
+	example08 = at.MustRead("./data/example08.txt")
+	input = at.MustRead("./data/input.txt")
 
-	e1a, e1b, e2a, e2b, e3a, e3b, e4a, e4b, i := string(example1aFile), string(example1bFile), string(example2aFile), string(example2bFile), string(example3aFile), string(example3bFile), string(example4aFile), string(example4bFile), string(inputFile)
-	example1a, example1b, example2a, example2b, example3a, example3b, example4a, example4b, input = &e1a, &e1b, &e2a, &e2b, &e3a, &e3b, &e4a, &e4b, &i
-
-	code := m.Run()
-	os.Exit(code)
-}
-
-type testCase struct {
-	name     string
-	input    *string
-	expected int
+	os.Exit(m.Run())
 }
 
 func TestD10p1(t *testing.T) {
-	testCases := []testCase{
-		{"example1a", example1a, 4},
-		{"example1b", example1b, 4},
-		{"example2a", example2a, 8},
-		{"example2b", example2b, 8},
-		{"input", input, 7102},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if result := part1(*tc.input); result != tc.expected {
-				t.Errorf("(d10p1) got %d, need %d", result, tc.expected)
-			}
-		})
-	}
+	at.Run(t, part1, []at.Case[uint32]{
+		{Name: "d10_p1_e01", Input: example01, Expected: 4},
+		{Name: "d10_p1_e02", Input: example02, Expected: 4},
+		{Name: "d10_p1_e03", Input: example03, Expected: 8},
+		{Name: "d10_p1_e04", Input: example04, Expected: 8},
+		{Name: "d10_p1_i", Input: input, Expected: 7102},
+	})
 }
 
 func TestD10p2(t *testing.T) {
-	testCases := []testCase{
-		{"example3a", example3a, 4},
-		{"example3b", example3b, 4},
-		{"example4a", example4a, 8},
-		{"example4b", example4b, 10},
-		{"input", input, 363},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if result := part2(*tc.input); result != tc.expected {
-				t.Errorf("(d10p2) got %d, need %d", result, tc.expected)
-			}
-		})
-	}
+	at.Run(t, part2, []at.Case[uint32]{
+		{Name: "d10_p2_e05", Input: example05, Expected: 4},
+		{Name: "d10_p2_e06", Input: example06, Expected: 4},
+		{Name: "d10_p2_e07", Input: example07, Expected: 8},
+		{Name: "d10_p2_e08", Input: example08, Expected: 10},
+		{Name: "d10_p2_i", Input: input, Expected: 363},
+	})
 }

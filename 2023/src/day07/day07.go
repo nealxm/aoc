@@ -15,8 +15,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day seven part one: %d\n", part1(string(file)))
-	fmt.Printf("day seven part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d07p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d07p2 - %d\n", part2(string(file)))
 }
 
 type rank uint8
@@ -67,13 +67,14 @@ var strClass1 = map[byte]class1{
 type hand struct {
 	cards string
 	kind  rank
-	bid   int
+	bid   uint16
 }
 
 func processInput1(input string) (hands []hand) {
 	for i, line := range strings.Split(input, "\n") {
 		for j, part := range strings.Split(line, " ") {
-			if j == 0 {
+			switch j {
+			case 0:
 				cards := map[rune]int{}
 				for _, char := range part {
 					cards[char]++
@@ -90,9 +91,10 @@ func processInput1(input string) (hands []hand) {
 						}
 					}
 
-					if max == 4 {
+					switch max {
+					case 4:
 						rnk = four
-					} else if max == 3 {
+					case 3:
 						rnk = full
 					}
 				} else if len(cards) == 3 {
@@ -103,9 +105,10 @@ func processInput1(input string) (hands []hand) {
 						}
 					}
 
-					if max == 3 {
+					switch max {
+					case 3:
 						rnk = three
-					} else if max == 2 {
+					case 2:
 						rnk = two
 					}
 				} else if len(cards) == 4 {
@@ -118,19 +121,19 @@ func processInput1(input string) (hands []hand) {
 					cards: part,
 					kind:  rnk,
 				})
-			} else if j == 1 {
-				dNum, err := strconv.Atoi(part)
+			case 1:
+				dNum, err := strconv.ParseUint(part, 10, 16)
 				if err != nil {
 					log.Fatal(err)
 				}
-				hands[i].bid = dNum
+				hands[i].bid = uint16(dNum)
 			}
 		}
 	}
 	return hands
 }
 
-func part1(input string) (sum int) {
+func part1(input string) (sum uint32) {
 	hands := processInput1(input)
 
 	slices.SortFunc(hands, func(a, b hand) int {
@@ -146,7 +149,7 @@ func part1(input string) (sum int) {
 	})
 
 	for i, hand := range hands {
-		sum += (i + 1) * hand.bid
+		sum += (uint32(i) + 1) * uint32(hand.bid)
 	}
 	return sum
 }
@@ -214,23 +217,26 @@ func processInput2(input string) (hands []hand) {
 					adjLen--
 				}
 
-				if adjLen == 1 {
+				switch adjLen {
+				case 1:
 					rnk = five
-				} else if adjLen == 2 {
-					if max == 4 {
+				case 2:
+					switch max {
+					case 4:
 						rnk = four
-					} else if max == 3 {
+					case 3:
 						rnk = full
 					}
-				} else if adjLen == 3 {
-					if max == 3 {
+				case 3:
+					switch max {
+					case 3:
 						rnk = three
-					} else if max == 2 {
+					case 2:
 						rnk = two
 					}
-				} else if adjLen == 4 {
+				case 4:
 					rnk = one
-				} else if adjLen == 5 {
+				case 5:
 					rnk = high
 				}
 
@@ -239,18 +245,18 @@ func processInput2(input string) (hands []hand) {
 					kind:  rnk,
 				})
 			} else if j == 1 {
-				dNum, err := strconv.Atoi(part)
+				dNum, err := strconv.ParseUint(part, 10, 16)
 				if err != nil {
 					log.Fatal(err)
 				}
-				hands[i].bid = dNum
+				hands[i].bid = uint16(dNum)
 			}
 		}
 	}
 	return hands
 }
 
-func part2(input string) (sum int) {
+func part2(input string) (sum uint32) {
 	hands := processInput2(input)
 
 	slices.SortFunc(hands, func(a, b hand) int {
@@ -266,7 +272,7 @@ func part2(input string) (sum int) {
 	})
 
 	for i, hand := range hands {
-		sum += (i + 1) * hand.bid
+		sum += (uint32(i) + 1) * uint32(hand.bid)
 	}
 	return sum
 }

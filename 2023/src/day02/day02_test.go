@@ -1,62 +1,30 @@
 package day02
 
 import (
-	"log"
+	at "aoc2023/common/aoc_testing"
 	"os"
 	"testing"
 )
 
-var example, input *string
+var example01, input *string
 
 func TestMain(m *testing.M) {
-	exampleFile, err := os.ReadFile("./data/example.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	inputFile, err := os.ReadFile("./data/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
+	example01 = at.MustRead("./data/example01.txt")
+	input = at.MustRead("./data/input.txt")
 
-	e, i := string(exampleFile), string(inputFile)
-	example, input = &e, &i
-
-	code := m.Run()
-	os.Exit(code)
+	os.Exit(m.Run())
 }
 
-type testCase struct {
-	name     string
-	input    *string
-	expected int
+func TestD02p1(t *testing.T) {
+	at.Run(t, part1, []at.Case[uint16]{
+		{Name: "d02_p1_e01", Input: example01, Expected: 8},
+		{Name: "d02_p1_i", Input: input, Expected: 2369},
+	})
 }
 
-func TestD2p1(t *testing.T) {
-	testCases := []testCase{
-		{"example", example, 8},
-		{"input", input, 2369},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if result := part1(*tc.input); result != tc.expected {
-				t.Errorf("(d2p1) got %d, need %d", result, tc.expected)
-			}
-		})
-	}
-}
-
-func TestD2p2(t *testing.T) {
-	testCases := []testCase{
-		{"example", example, 2286},
-		{"input", input, 66363},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if result := part2(*tc.input); result != tc.expected {
-				t.Errorf("(d2p2) got %d, need %d", result, tc.expected)
-			}
-		})
-	}
+func TestD02p2(t *testing.T) {
+	at.Run(t, part2, []at.Case[uint32]{
+		{Name: "d02_p2_e01", Input: example01, Expected: 2286},
+		{Name: "d02_p2_i", Input: input, Expected: 66363},
+	})
 }

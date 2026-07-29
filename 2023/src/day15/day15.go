@@ -16,18 +16,18 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day fifteen part one: %d\n", part1(string(file)))
-	fmt.Printf("day fifteen part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d15p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d15p2 - %d\n", part2(string(file)))
 }
 
-func hash(seqStr string) (sum int) {
+func hash(seqStr string) (sum uint32) {
 	for _, chr := range seqStr {
-		sum = ((sum + int(chr)) * 17) % 256
+		sum = ((sum + uint32(chr)) * 17) % 256
 	}
 	return sum
 }
 
-func part1(input string) (sum int) {
+func part1(input string) (sum uint32) {
 	for _, seqStr := range strings.Split(input, ",") {
 		sum += hash(seqStr)
 	}
@@ -70,7 +70,7 @@ type lens struct {
 	power uint8
 }
 
-func part2(input string) (sum int) {
+func part2(input string) (sum uint32) {
 	boxes := make([][]lens, 256)
 
 	for _, seq := range parseInput(input) {
@@ -93,7 +93,7 @@ func part2(input string) (sum int) {
 	}
 	for b, box := range boxes {
 		for l, lens := range box {
-			sum += (b + 1) * (l + 1) * int(lens.power)
+			sum += (uint32(b) + 1) * (uint32(l) + 1) * uint32(lens.power)
 		}
 	}
 	return sum

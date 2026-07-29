@@ -1,62 +1,30 @@
 package day13
 
 import (
-	"log"
+	at "aoc2023/common/aoc_testing"
 	"os"
 	"testing"
 )
 
-var example, input *string
+var example01, input *string
 
 func TestMain(m *testing.M) {
-	exampleFile, err := os.ReadFile("./data/example.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	inputFile, err := os.ReadFile("./data/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
+	example01 = at.MustRead("./data/example01.txt")
+	input = at.MustRead("./data/input.txt")
 
-	e, i := string(exampleFile), string(inputFile)
-	example, input = &e, &i
-
-	code := m.Run()
-	os.Exit(code)
-}
-
-type testCase struct {
-	name     string
-	input    *string
-	expected int
+	os.Exit(m.Run())
 }
 
 func TestD13p1(t *testing.T) {
-	testCases := []testCase{
-		{"example", example, 405},
-		{"input", input, 35538},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if result := part1(*tc.input); result != tc.expected {
-				t.Errorf("(d13p1) got %d, need %d", result, tc.expected)
-			}
-		})
-	}
+	at.Run(t, part1, []at.Case[uint16]{
+		{Name: "d13_p1_e01", Input: example01, Expected: 405},
+		{Name: "d13_p1_i", Input: input, Expected: 35538},
+	})
 }
 
 func TestD13p2(t *testing.T) {
-	testCases := []testCase{
-		{"example", example, 400},
-		{"input", input, 30442},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if result := part2(*tc.input); result != tc.expected {
-				t.Errorf("(d13p2) got %d, need %d", result, tc.expected)
-			}
-		})
-	}
+	at.Run(t, part2, []at.Case[uint16]{
+		{Name: "d13_p2_e01", Input: example01, Expected: 400},
+		{Name: "d13_p2_i", Input: input, Expected: 30442},
+	})
 }

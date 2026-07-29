@@ -13,12 +13,12 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day ten part one: %d\n", part1(string(file)))
-	fmt.Printf("day ten part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d10p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d10p2 - %d\n", part2(string(file)))
 }
 
 type vec2 struct {
-	r, c int
+	r, c int32
 }
 
 func processInput1(input string) (grid [][]string, start vec2) {
@@ -29,7 +29,7 @@ func processInput1(input string) (grid [][]string, start vec2) {
 			row = append(row, string(char))
 
 			if char == 'S' {
-				start = vec2{r, c}
+				start = vec2{int32(r), int32(c)}
 			}
 		}
 		grid = append(grid, row)
@@ -60,7 +60,7 @@ var dirs = map[string]func(idx int) bool{
 	"F": func(idx int) bool { return idx == 0 || idx == 3 },
 }
 
-func part1(input string) (steps int) {
+func part1(input string) (steps uint32) {
 	grid, curr := processInput1(input)
 	prev := curr
 
@@ -68,8 +68,8 @@ outer:
 	for {
 	main:
 		for i, check := range checks {
-			r := min(max(curr.r+check.r, 0), len(grid)-1)
-			c := min(max(curr.c+check.c, 0), len(grid[r])-1)
+			r := min(int32(max(curr.r+check.r, 0)), int32(len(grid)-1))
+			c := min(int32(max(curr.c+check.c, 0)), int32(len(grid[r])-1))
 			if r == prev.r && c == prev.c {
 				continue
 			}
@@ -97,11 +97,11 @@ outer:
 	return steps / 2
 }
 
-func encode(a, b int) int {
+func encode(a, b int32) int32 {
 	return ((a + b) * (a + b + 1) / 2) + b
 }
 
-func processInput2(input string) ([][]string, map[int]bool) {
+func processInput2(input string) ([][]string, map[int32]bool) {
 	grid := [][]string{}
 	curr := vec2{}
 
@@ -112,20 +112,20 @@ func processInput2(input string) ([][]string, map[int]bool) {
 			row = append(row, string(char))
 
 			if char == 'S' {
-				curr = vec2{r, c}
+				curr = vec2{int32(r), int32(c)}
 			}
 		}
 		grid = append(grid, row)
 	}
 	prev := curr
-	loop := make(map[int]bool)
+	loop := make(map[int32]bool)
 
 outer:
 	for {
 	main:
 		for i, check := range checks {
-			r := min(max(curr.r+check.r, 0), len(grid)-1)
-			c := min(max(curr.c+check.c, 0), len(grid[r])-1)
+			r := min(int32(max(curr.r+check.r, 0)), int32(len(grid)-1))
+			c := min(int32(max(curr.c+check.c, 0)), int32(len(grid[r])-1))
 			if r == prev.r && c == prev.c {
 				continue
 			}
@@ -155,8 +155,8 @@ outer:
 
 	for i, check := range checks {
 		sAdj := vec2{
-			r: min(max(curr.r+check.r, 0), len(grid)-1),
-			c: min(max(curr.c+check.c, 0), len(grid[curr.r])-1),
+			r: min(int32(max(curr.r+check.r, 0)), int32(len(grid)-1)),
+			c: min(int32(max(curr.c+check.c, 0)), int32(len(grid[curr.r])-1)),
 		}
 
 		if chrAdj := grid[sAdj.r][sAdj.c]; chrAdj != "." && chrAdj != "S" && dirs[chrAdj](i) {
@@ -194,18 +194,18 @@ func (s *strStack) pop() string {
 	return str
 }
 
-func part2(input string) (area int) {
+func part2(input string) (area uint32) {
 	grid, loop := processInput2(input)
 
 	for r, row := range grid {
 		for c := range row {
-			if loop[encode(r, c)] {
+			if loop[encode(int32(r), int32(c))] {
 				continue
 			}
 			stack := strStack{}
 
 			for i, chr := range row[c:] {
-				if loop[encode(r, c+i)] {
+				if loop[encode(int32(r), int32(c+i))] {
 					switch chr {
 					case "|", "L", "F":
 						stack.push(chr)

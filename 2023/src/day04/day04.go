@@ -15,8 +15,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day four part one: %d\n", part1(string(file)))
-	fmt.Printf("day four part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d04p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d04p2 - %d\n", part2(string(file)))
 }
 
 var (
@@ -25,33 +25,33 @@ var (
 	givRe = regexp.MustCompile(`(?:\s\|)((\s+\d+)+)`)
 )
 
-func processNums(line string) (nums []int) {
+func processNums(line string) (nums []uint8) {
 	for _, sNum := range numRe.FindAllString(line, -1) {
-		iNum, err := strconv.Atoi(sNum)
+		iNum, err := strconv.ParseUint(sNum, 10, 8)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		nums = append(nums, iNum)
+		nums = append(nums, uint8(iNum))
 	}
 	return nums
 }
 
-func getPoints(matches int) int {
+func getPoints(matches uint16) uint16 {
 	if matches == 0 {
 		return 0
 	}
 
-	points := 1
-	for n := 1; n < matches; n++ {
+	var points uint16 = 1
+	for n := 1; uint16(n) < matches; n++ {
 		points *= 2
 	}
 	return points
 }
 
-func part1(input string) (sum int) {
+func part1(input string) (sum uint16) {
 	for _, line := range strings.Split(input, "\n") {
-		matches := 0
+		var matches uint16 = 0
 
 		for _, given := range processNums(givRe.FindAllStringSubmatch(line, -1)[0][1]) {
 			for _, winner := range processNums(winRe.FindAllStringSubmatch(line, -1)[0][1]) {
@@ -61,15 +61,15 @@ func part1(input string) (sum int) {
 				matches += 1
 			}
 		}
-		sum += getPoints(matches)
+		sum += uint16(getPoints(matches))
 	}
 	return sum
 }
 
 type scorecard struct {
-	instances int
-	winners   []int
-	givens    []int
+	instances uint32
+	winners   []uint8
+	givens    []uint8
 }
 
 func processCards(input string) (cards []scorecard) {
@@ -83,7 +83,7 @@ func processCards(input string) (cards []scorecard) {
 	return cards
 }
 
-func part2(input string) (sum int) {
+func part2(input string) (sum uint32) {
 	cards := processCards(input)
 
 	for i, card := range cards {

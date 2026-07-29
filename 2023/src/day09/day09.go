@@ -14,8 +14,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day nine part one: %d\n", part1(string(file)))
-	fmt.Printf("day nine part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d09p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d09p2 - %d\n", part2(string(file)))
 }
 
 func extrapolateReading(curr []int32) int32 {
@@ -44,7 +44,7 @@ func part1(input string) (sum int32) {
 		readings := []int32{}
 
 		for _, sNum := range strings.Split(line, " ") {
-			dNum, err := strconv.Atoi(sNum)
+			dNum, err := strconv.ParseInt(sNum, 10, 32)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -81,7 +81,7 @@ func part2(input string) (sum int32) {
 		readings := []int32{}
 
 		for _, sNum := range strings.Split(line, " ") {
-			dNum, err := strconv.Atoi(sNum)
+			dNum, err := strconv.ParseInt(sNum, 10, 32)
 			if err != nil {
 				log.Fatal(err)
 			}

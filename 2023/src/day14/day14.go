@@ -15,8 +15,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day fourteen part one: %d\n", part1(string(file)))
-	fmt.Printf("day fourteen part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d14p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d14p2 - %d\n", part2(string(file)))
 }
 
 func parseInput(input string) *[][]byte {
@@ -101,14 +101,14 @@ func tiltEast(grid *[][]byte) {
 	}
 }
 
-func northLoad(grid [][]byte) (sum int) {
+func northLoad(grid [][]byte) (sum uint32) {
 	for r, row := range grid {
-		sum += bytes.Count(row, []byte{'O'}) * (len(grid) - r)
+		sum += uint32(bytes.Count(row, []byte{'O'})) * uint32(len(grid)-r)
 	}
 	return sum
 }
 
-func part1(input string) int {
+func part1(input string) uint32 {
 	grid := parseInput(input)
 	tiltNorth(grid)
 	return northLoad(*grid)
@@ -121,9 +121,9 @@ func cRun(grid *[][]byte) {
 	tiltEast(grid)
 }
 
-func part2(input string) int {
+func part2(input string) uint32 {
 	grid := parseInput(input)
-	seen := make(map[string]int)
+	seen := make(map[string]uint32)
 
 	for i := range 1_000_000_000 {
 		hasher := sha256.New()
@@ -133,14 +133,14 @@ func part2(input string) int {
 		hash := string(hasher.Sum(nil))
 
 		if lastSeen, exists := seen[hash]; exists {
-			remaining := (1_000_000_000 - lastSeen) % (i - lastSeen)
+			remaining := (1_000_000_000 - lastSeen) % (uint32(i) - lastSeen)
 
 			for range remaining {
 				cRun(grid)
 			}
 			return northLoad(*grid)
 		}
-		seen[hash] = i
+		seen[hash] = uint32(i)
 		cRun(grid)
 	}
 	return northLoad(*grid)

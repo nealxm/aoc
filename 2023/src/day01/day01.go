@@ -13,57 +13,48 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day one part one: %d\n", part1(string(file)))
-	fmt.Printf("day one part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d01p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d01p2 - %d\n", part2(string(file)))
 }
 
-func part1(input string) int {
-	sum := 0
-	for _, line := range strings.Split(input, "\n") {
-		sum += (firstDigit(line) * 10) + lastDigit(line)
-	}
-	return sum
-}
-
-func firstDigit(line string) int {
+func firstDigit(line string) int8 {
 	for i := 0; i < len(line); i++ {
 		if line[i] >= '0' && line[i] <= '9' {
-			return int(line[i] - '0')
+			return int8(line[i] - '0')
 		}
 	}
 	log.Fatal("first digit not found in: ", line)
 	return -1
 }
 
-func lastDigit(line string) int {
+func lastDigit(line string) int8 {
 	for i := len(line) - 1; i >= 0; i-- {
 		if line[i] >= '0' && line[i] <= '9' {
-			return int(line[i] - '0')
+			return int8(line[i] - '0')
 		}
 	}
 	log.Fatal("last digit not found in: ", line)
 	return -1
 }
 
-func part2(input string) int {
-	sum := 0
+func part1(input string) (sum uint16) {
 	for _, line := range strings.Split(input, "\n") {
-		sum += (firstNum(line) * 10) + lastNum(line)
+		sum += uint16((firstDigit(line) * 10) + lastDigit(line))
 	}
 	return sum
 }
 
 var numbers = []string{"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
 
-func firstNum(line string) int {
+func firstNum(line string) int8 {
 	for i := 0; i < len(line); i++ {
 		if line[i] >= '0' && line[i] <= '9' {
-			return int(line[i] - '0')
+			return int8(line[i] - '0')
 		}
 
 		for j, num := range numbers {
 			if strings.HasSuffix(line[:i+1], num) {
-				return j + 1
+				return int8(j + 1)
 			}
 		}
 	}
@@ -71,18 +62,25 @@ func firstNum(line string) int {
 	return -1
 }
 
-func lastNum(line string) int {
+func lastNum(line string) int8 {
 	for i := len(line) - 1; i >= 0; i-- {
 		if line[i] >= '0' && line[i] <= '9' {
-			return int(line[i] - '0')
+			return int8(line[i] - '0')
 		}
 
 		for j, num := range numbers {
 			if strings.HasPrefix(line[i-1:], num) {
-				return j + 1
+				return int8(j + 1)
 			}
 		}
 	}
 	log.Fatal("last number not found in: ", line)
 	return -1
+}
+
+func part2(input string) (sum uint16) {
+	for _, line := range strings.Split(input, "\n") {
+		sum += uint16((firstNum(line) * 10) + lastNum(line))
+	}
+	return sum
 }

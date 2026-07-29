@@ -1,67 +1,32 @@
 package day15
 
 import (
-	"log"
+	at "aoc2023/common/aoc_testing"
 	"os"
 	"testing"
 )
 
-var example1, example2, input *string
+var example01, example02, input *string
 
 func TestMain(m *testing.M) {
-	example1File, err := os.ReadFile("./data/example1.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	example2File, err := os.ReadFile("./data/example2.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	inputFile, err := os.ReadFile("./data/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
+	example01 = at.MustRead("./data/example01.txt")
+	example02 = at.MustRead("./data/example02.txt")
+	input = at.MustRead("./data/input.txt")
 
-	e1, e2, i := string(example1File), string(example2File), string(inputFile)
-	example1, example2, input = &e1, &e2, &i
-
-	code := m.Run()
-	os.Exit(code)
-}
-
-type testCase struct {
-	name     string
-	input    *string
-	expected int
+	os.Exit(m.Run())
 }
 
 func TestD15p1(t *testing.T) {
-	testCases := []testCase{
-		{"example1", example1, 52},
-		{"example2", example2, 1320},
-		{"input", input, 505427},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if result := part1(*tc.input); result != tc.expected {
-				t.Errorf("(d15p1) got %d, need %d", result, tc.expected)
-			}
-		})
-	}
+	at.Run(t, part1, []at.Case[uint32]{
+		{Name: "d15_p1_e01", Input: example01, Expected: 52},
+		{Name: "d15_p1_e02", Input: example02, Expected: 1320},
+		{Name: "d15_p1_i", Input: input, Expected: 505427},
+	})
 }
 
 func TestD15p2(t *testing.T) {
-	testCases := []testCase{
-		{"example2", example2, 145},
-		{"input", input, 243747},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			if result := part2(*tc.input); result != tc.expected {
-				t.Errorf("(d15p2) got %d, need %d", result, tc.expected)
-			}
-		})
-	}
+	at.Run(t, part2, []at.Case[uint32]{
+		{Name: "d15_p2_e02", Input: example02, Expected: 145},
+		{Name: "d15_p2_i", Input: input, Expected: 243747},
+	})
 }

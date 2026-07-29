@@ -15,8 +15,8 @@ func Main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("day five part one: %d\n", part1(string(file)))
-	fmt.Printf("day five part two: %d\n", part2(string(file)))
+	fmt.Printf("2023:d05p1 - %d\n", part1(string(file)))
+	fmt.Printf("2023:d05p2 - %d\n", part2(string(file)))
 }
 
 var (
@@ -51,7 +51,7 @@ var strSpec = map[string]spec{
 
 type seed struct {
 	id  spec
-	val int64
+	val uint32
 }
 
 type numRange struct {
@@ -83,11 +83,12 @@ func processMaps(chunks []string) map[spec][]mapRange {
 					log.Fatal(err)
 				}
 
-				if i == 0 {
+				switch i {
+				case 0:
 					dstStart = dNum
-				} else if i == 1 {
+				case 1:
 					mr.min = dNum
-				} else if i == 2 {
+				case 2:
 					mr.max = mr.min + dNum
 				}
 			}
@@ -104,32 +105,32 @@ func processInput1(input string) ([]seed, map[spec][]mapRange) {
 	chunks := strings.Split(input, "\n\n")
 
 	for _, sNum := range numRe.FindAllString(chunks[0], -1) {
-		dNum, err := strconv.ParseInt(sNum, 10, 64)
+		dNum, err := strconv.ParseUint(sNum, 10, 32)
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		seeds = append(seeds, seed{
 			id:  base,
-			val: dNum,
+			val: uint32(dNum),
 		})
 	}
 	return seeds, processMaps(chunks[1:])
 }
 
-func part1(input string) (min int64) {
+func part1(input string) (min uint32) {
 	seeds, seedMaps := processInput1(input)
 
-	for i := base; i < loc; i++ {
+	for i := range loc {
 		for j, mapRange := range seedMaps[i] {
 			for k, seed := range seeds {
 				if seed.id != i {
 					continue
 				}
 
-				if seed.val >= mapRange.min && seed.val < mapRange.max {
+				if seed.val >= uint32(mapRange.min) && seed.val < uint32(mapRange.max) {
 					seeds[k].id++
-					seeds[k].val += mapRange.trans
+					seeds[k].val += uint32(mapRange.trans)
 				} else if j == len(seedMaps[i])-1 {
 					seeds[k].id++
 				}
@@ -139,10 +140,10 @@ func part1(input string) (min int64) {
 
 	for i, seed := range seeds {
 		if i == 1 {
-			min = seed.val
+			min = uint32(seed.val)
 		}
-		if seed.val < min {
-			min = seed.val
+		if uint32(seed.val) < min {
+			min = uint32(seed.val)
 		}
 	}
 	return min
@@ -166,9 +167,10 @@ func processInput2(input string) ([]seedRange, map[spec][]mapRange) {
 				log.Fatal(err)
 			}
 
-			if i == 0 {
+			switch i {
+			case 0:
 				sr.min = dNum
-			} else if i == 1 {
+			case 1:
 				sr.max = sr.min + dNum
 			}
 		}
@@ -177,7 +179,7 @@ func processInput2(input string) ([]seedRange, map[spec][]mapRange) {
 	return seedRanges, processMaps(chunks[1:])
 }
 
-func part2(input string) (min int64) {
+func part2(input string) (min uint32) {
 	seedRanges, seedMaps := processInput2(input)
 
 main:
@@ -259,10 +261,10 @@ main:
 
 	for i, seedRange := range seedRanges {
 		if i == 1 {
-			min = seedRange.min
+			min = uint32(seedRange.min)
 		}
-		if seedRange.min < min {
-			min = seedRange.min
+		if uint32(seedRange.min) < min {
+			min = uint32(seedRange.min)
 		}
 	}
 	return min
