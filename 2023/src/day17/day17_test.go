@@ -25,7 +25,8 @@ func TestD17p1(t *testing.T) {
 
 func TestD17p2(t *testing.T) {
 	at.Run(t, part2, []at.Case[uint16]{
-		{Name: "d17_p1_e01", Input: example01, Expected: 94},
+		{Name: "d17_p2_e01", Input: example01, Expected: 94},
 		{Name: "d17_p2_e02", Input: example02, Expected: 71},
+		{Name: "d17_p2_i", Input: input, Expected: 1178},
 	})
 }
